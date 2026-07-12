@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "comment": "Hand-verified technique videos. Add entries like: \"barbell-bench-press\": {\"title\": \"...\", \"channel\": \"...\", \"url\": \"https://www.youtube.com/watch?v=...\"}. Only add URLs you have actually opened and watched.",
+  "videos": {}
+}
