@@ -246,6 +246,24 @@ table.vault tr:hover td { background: rgba(255,255,255,.02); }
 }
 @keyframes rise { from { opacity: 0; transform: translate(-50%, 16px); } }
 
+/* ---------- pixel world ---------- */
+.px { image-rendering: pixelated; }
+.px-h1 { display: flex; align-items: center; gap: 12px; }
+.px-h1 .px { height: 34px; width: auto; filter: drop-shadow(0 2px 8px rgba(227,179,65,.25)); }
+.toast-px { height: 30px; width: auto; vertical-align: middle; margin-right: 10px; }
+#coach-head {
+  display: flex; gap: 14px; align-items: center; padding: 6px 4px 16px;
+  border-bottom: 1px solid var(--line); margin-bottom: 10px;
+}
+.coach-px { height: 58px; width: auto; filter: drop-shadow(0 3px 10px rgba(108,92,231,.4)); }
+.coach-name { font: 800 16px var(--sans); color: var(--fg); }
+.coach-sub { font: 11px var(--mono); color: var(--muted); margin-top: 2px; }
+#graph-hero {
+  position: absolute; left: 16px; bottom: 34px; height: 64px; width: auto;
+  z-index: 2; opacity: .9; filter: drop-shadow(0 4px 10px rgba(0,0,0,.5));
+  pointer-events: none;
+}
+
 /* ---------- hero banner ---------- */
 .hero-banner {
   display: flex; gap: 22px; align-items: center; margin-bottom: 18px;

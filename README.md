@@ -37,23 +37,25 @@ Every workout commit levels him up.</sub>
 
 </div>
 
-## 🏆 Current Personal Records
+## <img src="generated/sprites/trophy.gif" width="26" alt=""> PR Vault
+
+Every record below was once impossible.
 
 <img src="generated/personal-records.svg" alt="Personal records" width="860">
 
-## 📜 Recent Activity
+## <img src="generated/sprites/scroll.gif" width="26" alt=""> Quest Log
 
-_No workouts recorded yet. The first quest awaits._
+_The quest log is empty. Tonight's quest awaits._ ⚔️
 
-## 🫀 Muscle Group Distribution
+## 🫀 Attribute Distribution
 
 <img src="generated/muscle-distribution.svg" alt="Muscle distribution" width="860">
 
-## 🏅 Achievements
+## <img src="generated/sprites/chest.gif" width="28" alt=""> Trophy Hall
 
 <img src="generated/achievements.svg" alt="Achievements" width="860">
 
-## 🧭 Contribution Philosophy
+## <img src="generated/sprites/forge.gif" width="30" alt=""> The Forge — Contribution Philosophy
 
 | Software | Strength |
 |---|---|

@@ -18,5 +18,36 @@
       "instructions": "",
       "relations": {}
     }
-  ]
+  ],
+  "overrides": {
+    "treadmill": {
+      "name": "Incline Treadmill",
+      "category": "cardio",
+      "modality": "distance_time",
+      "equipment": "machine",
+      "movement_pattern": "gait",
+      "primary_muscles": [
+        "legs",
+        "cardiovascular"
+      ],
+      "secondary_muscles": [],
+      "compound": true,
+      "relations": {
+        "similar_to": [
+          "outdoor-run",
+          "walking"
+        ],
+        "progresses_to": [
+          "outdoor-run"
+        ],
+        "regresses_to": [
+          "walking"
+        ],
+        "alternative_to": [
+          "outdoor-run",
+          "elliptical"
+        ]
+      }
+    }
+  }
 }

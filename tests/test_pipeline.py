@@ -79,7 +79,7 @@ def test_multi_day_progression_and_readme(iso_repo):
     assert s["status"] == "ok"
     readme = (iso_repo / "README.md").read_text()
     assert "IronGraph" in readme and "2026-07-15" in readme
-    assert "Recent Activity" in readme
+    assert "Quest Log" in readme
     graph = json.loads((iso_repo / "data" / "graph.json").read_text())
     performed = [n for n in graph["nodes"] if n["performed"]]
     assert len(performed) >= 9

@@ -48,6 +48,7 @@
           <button id="zoom-out" title="Zoom out">−</button>
         </div>
         <canvas id="minimap" width="200" height="150"></canvas>
+        <img id="graph-hero" class="px" src="/generated/hero-sprite.gif" alt="" title="Your hero wanders the exercise universe" onerror="this.remove()">
         <div id="graph-help">drag to pan · scroll to zoom · click node to inspect · ←/→ hop neighbors · esc closes</div>
       </div>
     </section>
@@ -56,6 +57,13 @@
     <section id="view-achievements" class="view"></section>
     <section id="view-coach" class="view">
       <div id="coach-box">
+        <div id="coach-head">
+          <img class="px coach-px" src="/generated/sprites/coach.gif" alt="" onerror="this.remove()">
+          <div>
+            <div class="coach-name">The Iron Sage</div>
+            <div class="coach-sub">answers from your training history — no invented lore</div>
+          </div>
+        </div>
         <div id="coach-log"></div>
         <form id="coach-form">
           <input id="coach-input" placeholder="Ask about an exercise, your history, what to train next…" autocomplete="off">

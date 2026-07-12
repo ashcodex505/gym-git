@@ -34,7 +34,7 @@ authored by the person who performed it.
 """
 
 PHILOSOPHY = """\
-## 🧭 Contribution Philosophy
+## <img src="generated/sprites/forge.gif" width="30" alt=""> The Forge — Contribution Philosophy
 
 | Software | Strength |
 |---|---|
@@ -87,9 +87,9 @@ def _fmt_dur_min(s: float) -> str:
 
 
 def _recent_activity(events: list[WorkoutEvent], n: int = 7) -> str:
-    lines = ["## 📜 Recent Activity", ""]
+    lines = ['## <img src="generated/sprites/scroll.gif" width="26" alt=""> Quest Log', ""]
     if not events:
-        lines.append("_No workouts recorded yet. The first quest awaits._")
+        lines.append("_The quest log is empty. Tonight's quest awaits._ ⚔️")
         return "\n".join(lines) + "\n"
     lines.append("| Date | Session | Highlights |")
     lines.append("|---|---|---|")
@@ -133,21 +133,22 @@ def build_readme(*, stats_summary: dict, events: list[WorkoutEvent],
                  '<img src="generated/workout-heatmap.svg" alt="Training heatmap" width="860">\n\n'
                  "</div>\n")
 
-    parts.append("## 🏆 Current Personal Records\n\n"
+    parts.append('## <img src="generated/sprites/trophy.gif" width="26" alt=""> PR Vault\n\n'
+                 "Every record below was once impossible.\n\n"
                  '<img src="generated/personal-records.svg" alt="Personal records" width="860">\n')
 
     parts.append(_recent_activity(events))
 
     if featured_charts:
-        chart_md = ["## 📈 Strength Progression\n"]
+        chart_md = ['## <img src="generated/sprites/sword.gif" width="22" alt=""> Strength Progression\n']
         for slug in featured_charts:
             chart_md.append(f'<img src="generated/exercises/{slug}.svg" alt="{slug} progression" width="860">\n')
         parts.append("\n".join(chart_md))
 
-    parts.append("## 🫀 Muscle Group Distribution\n\n"
+    parts.append("## 🫀 Attribute Distribution\n\n"
                  '<img src="generated/muscle-distribution.svg" alt="Muscle distribution" width="860">\n')
 
-    parts.append("## 🏅 Achievements\n\n"
+    parts.append('## <img src="generated/sprites/chest.gif" width="28" alt=""> Trophy Hall\n\n'
                  '<img src="generated/achievements.svg" alt="Achievements" width="860">\n')
 
     parts.append(PHILOSOPHY)

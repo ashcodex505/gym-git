@@ -18,6 +18,7 @@ function setDesc(set) {
   if (set.duration_s != null) bits.push(fmtDur(set.duration_s));
   if (set.distance != null) bits.push(`${set.distance} ${set.distance_unit || "mi"}`);
   if (set.incline_pct != null) bits.push(`incline ${set.incline_pct}%`);
+  if (set.speed != null) bits.push(`${set.speed} mph`);
   if (set.level != null) bits.push(`level ${set.level}`);
   if (set.rpe != null) bits.push(`@${set.rpe} RPE`);
   return bits.join(" ");
@@ -28,6 +29,8 @@ const REC_LABEL = {
   max_distance: "Distance", best_pace: "Best pace",
 };
 const recLabel = (t) => REC_LABEL[t] || (t.startsWith("rep_weight:") ? `Best @ ${t.split(":")[1]} reps` : t);
+const h1 = (sprite, text) =>
+  `<h1 class="px-h1"><img class="px" src="/generated/sprites/${sprite}.gif" alt="" onerror="this.remove()">${text}</h1>`;
 
 // ---------------------------------------------------------------- views
 const views = ["home", "graph", "timeline", "vault", "achievements", "coach"];
@@ -62,7 +65,7 @@ async function renderHome() {
     else if (!next) next = { lv, name };
   }
   el.innerHTML = `
-    <h1>Command Center</h1>
+    ${h1("forge", "Command Center")}
     <div class="sub">every workout is a commit · every PR is a release</div>
     <div class="hero-banner">
       <img class="hero-sprite" src="/generated/hero-sprite.gif" alt="your hero"
@@ -110,7 +113,7 @@ async function renderHome() {
 async function renderTimeline() {
   const ws = await api("/workouts");
   const el = $("#view-timeline");
-  el.innerHTML = `<h1>Workout Timeline</h1><div class="sub">${ws.length} sessions · newest first</div>` +
+  el.innerHTML = h1("scroll", "Quest Log") + `<div class="sub">${ws.length} completed quests · newest first</div>` +
     (ws.length ? ws.map((w) => `
       <div class="tl-day">
         <div class="tl-date">${w.date}</div>
@@ -127,7 +130,7 @@ async function renderTimeline() {
 async function renderVault() {
   const rs = await api("/records");
   const el = $("#view-vault");
-  el.innerHTML = `<h1>PR Vault</h1><div class="sub">${rs.length} current records · full history preserved</div>` +
+  el.innerHTML = h1("trophy", "PR Vault") + `<div class="sub">${rs.length} current records · full history preserved</div>` +
     (rs.length ? `<table class="vault"><tr><th>Exercise</th><th>Record</th><th>Current</th><th>Set</th><th>History</th></tr>` +
       rs.map((r) => `<tr>
         <td><b>${esc(r.exercise_name)}</b></td>
@@ -144,7 +147,7 @@ async function renderVault() {
 async function renderAchievements() {
   const a = await api("/achievements");
   $("#view-achievements").innerHTML =
-    `<h1>Achievements</h1><div class="sub">${a.unlocked.length} unlocked · ${a.locked.length} remaining</div>
+    h1("chest", "Trophy Hall") + `<div class="sub">${a.unlocked.length} unlocked · ${a.locked.length} still sealed</div>
      <div class="ach-grid">
       ${a.unlocked.map((x) => `<div class="ach unlocked"><span class="e">${x.emoji}</span>
         <div><b>${esc(x.name)}</b><div class="d">${esc(x.description)} · ${x.date}</div></div></div>`).join("")}
@@ -492,7 +495,7 @@ $("#add-ex-form").addEventListener("submit", async (e) => {
 });
 function toast(html) {
   const t = $("#pr-toast");
-  t.innerHTML = html;
+  t.innerHTML = `<img class="px toast-px" src="/generated/sprites/trophy.gif" alt="" onerror="this.remove()">` + html;
   t.classList.remove("hidden");
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.add("hidden"), 6000);
