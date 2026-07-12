@@ -1,0 +1,55 @@
+# ============================================================================
+# IronGraph — central configuration
+# ============================================================================
+# This file is the single source of truth for identity + behavior settings
+# used by the ingestion pipeline and GitHub workflows.
+
+schema_version: 1
+
+# --- Git commit attribution (HARD REQUIREMENT) ------------------------------
+# Workout commits are authored by the human who performed the workout.
+# GitHub Actions is only the automation mechanism. This email is intentionally
+# public and linked to the owner's GitHub account so workout commits satisfy
+# GitHub's contribution-attribution criteria (author email must belong to a
+# GitHub account, commit must land on the default branch of a standalone repo).
+git_author:
+  name: "Ashish Kurse"
+  email: "ashishkurse@gmail.com"
+
+# --- Scheduling --------------------------------------------------------------
+# America/Phoenix does not observe DST: local time is always UTC-7.
+# 21:07 local == 04:07 UTC next day. Off-the-hour minute chosen deliberately:
+# GitHub Actions cron queues are least congested away from :00.
+timezone: "America/Phoenix"
+quest_hour_local: 21
+quest_minute_local: 7
+
+# --- Units -------------------------------------------------------------------
+default_weight_unit: lb        # lb | kg
+default_distance_unit: mi      # mi | km
+
+# --- Privacy -----------------------------------------------------------------
+# The public repository only ever contains workout performance data.
+# These toggles gate anything more personal than sets/reps/cardio metrics.
+privacy:
+  publish_bodyweight: false    # bodyweight values never leave local/ unless true
+  publish_notes: true          # per-exercise notes entered in quest issues
+
+# --- Progression -------------------------------------------------------------
+# Estimated 1RM uses the Epley formula: e1RM = w * (1 + reps/30).
+# Only computed for 1..12 reps; beyond that the estimate is unreliable.
+e1rm_formula: epley
+e1rm_max_reps: 12
+# Minimum distinct sessions before an exercise trend may be labeled
+# improving/stable/declining (fewer => "insufficient data").
+trend_min_sessions: 4
+
+# --- Gamification --------------------------------------------------------
+xp:
+  workout_complete: 50
+  per_exercise: 10        # capped at 8 exercises per workout (anti-junk-volume)
+  per_exercise_cap: 8
+  personal_record: 75
+  new_exercise: 25
+  weekly_streak_bonus: 40 # per completed consistency week
+weekly_consistency_target: 3   # workouts/week that keep the consistency streak alive
