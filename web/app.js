@@ -390,6 +390,11 @@ $("#aem-cancel").addEventListener("click", () => $("#add-ex-modal").classList.ad
 $("#add-ex-modal").addEventListener("click", (e) => {
   if (e.target.id === "add-ex-modal") $("#add-ex-modal").classList.add("hidden");
 });
+// Escape must work even while typing in a modal input (the global handler
+// ignores keys from inputs)
+$("#add-ex-modal").addEventListener("keydown", (e) => {
+  if (e.key === "Escape") { e.stopPropagation(); $("#add-ex-modal").classList.add("hidden"); }
+});
 $("#add-ex-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const f = new FormData(e.target);

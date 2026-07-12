@@ -26,6 +26,15 @@ from ..streaks import compute_streaks
 
 app = FastAPI(title="IronGraph", docs_url="/api/docs")
 
+
+@app.middleware("http")
+async def no_cache(request, call_next):
+    """Localhost dev tool: never let the browser serve stale app.js/CSS —
+    a cached old script silently breaks new UI (buttons with no handler)."""
+    resp = await call_next(request)
+    resp.headers["Cache-Control"] = "no-cache, must-revalidate"
+    return resp
+
 WEB_DIR = Path(__file__).resolve().parent.parent.parent / "web"
 
 
