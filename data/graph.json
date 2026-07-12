@@ -1,0 +1,2185 @@
+{
+ "schema_version": 1,
+ "clusters": [
+  {
+   "id": "chest",
+   "cx": 0.0,
+   "cy": -340.0
+  },
+  {
+   "id": "back",
+   "cx": 218.5,
+   "cy": -260.5
+  },
+  {
+   "id": "shoulders",
+   "cx": 334.8,
+   "cy": -59.0
+  },
+  {
+   "id": "biceps",
+   "cx": 294.4,
+   "cy": 170.0
+  },
+  {
+   "id": "triceps",
+   "cx": 116.3,
+   "cy": 319.5
+  },
+  {
+   "id": "legs",
+   "cx": -116.3,
+   "cy": 319.5
+  },
+  {
+   "id": "glutes",
+   "cx": -294.4,
+   "cy": 170.0
+  },
+  {
+   "id": "core",
+   "cx": -334.8,
+   "cy": -59.0
+  },
+  {
+   "id": "cardio",
+   "cx": -218.5,
+   "cy": -260.5
+  }
+ ],
+ "nodes": [
+  {
+   "id": "barbell-bench-press",
+   "name": "Barbell Bench Press",
+   "category": "chest",
+   "muscles": [
+    "chest"
+   ],
+   "pattern": "horizontal-push",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 101.7,
+   "y": -215.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "dumbbell-bench-press",
+   "name": "Dumbbell Bench Press",
+   "category": "chest",
+   "muscles": [
+    "chest"
+   ],
+   "pattern": "horizontal-push",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 25.3,
+   "y": -209.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "incline-bench-press",
+   "name": "Incline Bench Press",
+   "category": "chest",
+   "muscles": [
+    "upper-chest"
+   ],
+   "pattern": "incline-push",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 20.3,
+   "y": -355.7,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "incline-dumbbell-press",
+   "name": "Incline Dumbbell Press",
+   "category": "chest",
+   "muscles": [
+    "upper-chest"
+   ],
+   "pattern": "incline-push",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -35.3,
+   "y": -294.8,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "chest-press-machine",
+   "name": "Chest Press Machine",
+   "category": "chest",
+   "muscles": [
+    "chest"
+   ],
+   "pattern": "horizontal-push",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 22.0,
+   "y": -257.9,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "cable-fly",
+   "name": "Cable Fly",
+   "category": "chest",
+   "muscles": [
+    "chest"
+   ],
+   "pattern": "horizontal-adduction",
+   "equipment": "cable",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 57.0,
+   "y": -347.2,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "pec-deck",
+   "name": "Pec Deck",
+   "category": "chest",
+   "muscles": [
+    "chest"
+   ],
+   "pattern": "horizontal-adduction",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -31.6,
+   "y": -352.5,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "dips",
+   "name": "Dips",
+   "category": "chest",
+   "muscles": [
+    "lower-chest",
+    "triceps"
+   ],
+   "pattern": "vertical-push",
+   "equipment": "bodyweight",
+   "modality": "reps",
+   "compound": true,
+   "custom": false,
+   "x": 106.9,
+   "y": -174.5,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "push-up",
+   "name": "Push-ups",
+   "category": "chest",
+   "muscles": [
+    "chest"
+   ],
+   "pattern": "horizontal-push",
+   "equipment": "bodyweight",
+   "modality": "reps",
+   "compound": true,
+   "custom": false,
+   "x": 50.1,
+   "y": -292.5,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "deadlift",
+   "name": "Deadlift",
+   "category": "back",
+   "muscles": [
+    "lower-back",
+    "glutes",
+    "hamstrings"
+   ],
+   "pattern": "hip-hinge",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 2.1,
+   "y": 38.2,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "barbell-row",
+   "name": "Barbell Row",
+   "category": "back",
+   "muscles": [
+    "lats",
+    "mid-back"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 196.2,
+   "y": -211.9,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "dumbbell-row",
+   "name": "Dumbbell Row",
+   "category": "back",
+   "muscles": [
+    "lats",
+    "mid-back"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 184.6,
+   "y": -277.0,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "lat-pulldown",
+   "name": "Lat Pulldown",
+   "category": "back",
+   "muscles": [
+    "lats"
+   ],
+   "pattern": "vertical-pull",
+   "equipment": "cable",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 299.0,
+   "y": -232.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "pull-up",
+   "name": "Pull-ups",
+   "category": "back",
+   "muscles": [
+    "lats"
+   ],
+   "pattern": "vertical-pull",
+   "equipment": "bodyweight",
+   "modality": "reps",
+   "compound": true,
+   "custom": false,
+   "x": 227.8,
+   "y": -190.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "chin-up",
+   "name": "Chin-ups",
+   "category": "back",
+   "muscles": [
+    "lats",
+    "biceps"
+   ],
+   "pattern": "vertical-pull",
+   "equipment": "bodyweight",
+   "modality": "reps",
+   "compound": true,
+   "custom": false,
+   "x": 228.0,
+   "y": -270.5,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "seated-cable-row",
+   "name": "Seated Cable Row",
+   "category": "back",
+   "muscles": [
+    "mid-back",
+    "lats"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "cable",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 128.6,
+   "y": -291.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "t-bar-row",
+   "name": "T-Bar Row",
+   "category": "back",
+   "muscles": [
+    "mid-back",
+    "lats"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 220.9,
+   "y": -309.7,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "inverted-row",
+   "name": "Inverted Row",
+   "category": "back",
+   "muscles": [
+    "mid-back",
+    "lats"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "bodyweight",
+   "modality": "reps",
+   "compound": true,
+   "custom": false,
+   "x": 134.7,
+   "y": -240.9,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "overhead-press",
+   "name": "Overhead Press",
+   "category": "shoulders",
+   "muscles": [
+    "front-delts",
+    "side-delts"
+   ],
+   "pattern": "vertical-push",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 346.9,
+   "y": -112.1,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "dumbbell-shoulder-press",
+   "name": "Dumbbell Shoulder Press",
+   "category": "shoulders",
+   "muscles": [
+    "front-delts",
+    "side-delts"
+   ],
+   "pattern": "vertical-push",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 272.0,
+   "y": -130.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "arnold-press",
+   "name": "Arnold Press",
+   "category": "shoulders",
+   "muscles": [
+    "front-delts",
+    "side-delts"
+   ],
+   "pattern": "vertical-push",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 274.5,
+   "y": -46.0,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "lateral-raise",
+   "name": "Lateral Raise",
+   "category": "shoulders",
+   "muscles": [
+    "side-delts"
+   ],
+   "pattern": "lateral-raise",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 355.8,
+   "y": -32.7,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "rear-delt-fly",
+   "name": "Rear Delt Fly",
+   "category": "shoulders",
+   "muscles": [
+    "rear-delts"
+   ],
+   "pattern": "horizontal-abduction",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 293.0,
+   "y": -91.5,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "face-pull",
+   "name": "Face Pull",
+   "category": "shoulders",
+   "muscles": [
+    "rear-delts",
+    "traps"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "cable",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 227.3,
+   "y": -115.9,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "barbell-curl",
+   "name": "Barbell Curl",
+   "category": "biceps",
+   "muscles": [
+    "biceps"
+   ],
+   "pattern": "elbow-flexion",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 224.9,
+   "y": 140.3,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "dumbbell-curl",
+   "name": "Dumbbell Curl",
+   "category": "biceps",
+   "muscles": [
+    "biceps"
+   ],
+   "pattern": "elbow-flexion",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 261.3,
+   "y": 215.2,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "hammer-curl",
+   "name": "Hammer Curl",
+   "category": "biceps",
+   "muscles": [
+    "biceps",
+    "forearms"
+   ],
+   "pattern": "elbow-flexion",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 293.6,
+   "y": 123.9,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "preacher-curl",
+   "name": "Preacher Curl",
+   "category": "biceps",
+   "muscles": [
+    "biceps"
+   ],
+   "pattern": "elbow-flexion",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 320.0,
+   "y": 190.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "tricep-pushdown",
+   "name": "Tricep Pushdown",
+   "category": "triceps",
+   "muscles": [
+    "triceps"
+   ],
+   "pattern": "elbow-extension",
+   "equipment": "cable",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 123.0,
+   "y": 218.7,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "skull-crushers",
+   "name": "Skull Crushers",
+   "category": "triceps",
+   "muscles": [
+    "triceps"
+   ],
+   "pattern": "elbow-extension",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 164.6,
+   "y": 303.1,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "overhead-tricep-extension",
+   "name": "Overhead Tricep Extension",
+   "category": "triceps",
+   "muscles": [
+    "triceps"
+   ],
+   "pattern": "elbow-extension",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": 96.1,
+   "y": 315.6,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "close-grip-bench-press",
+   "name": "Close-Grip Bench Press",
+   "category": "triceps",
+   "muscles": [
+    "triceps"
+   ],
+   "pattern": "horizontal-push",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": 106.1,
+   "y": 13.2,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "back-squat",
+   "name": "Back Squat",
+   "category": "legs",
+   "muscles": [
+    "quads",
+    "glutes"
+   ],
+   "pattern": "squat",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -112.4,
+   "y": 231.6,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "front-squat",
+   "name": "Front Squat",
+   "category": "legs",
+   "muscles": [
+    "quads"
+   ],
+   "pattern": "squat",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -78.5,
+   "y": 327.6,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "leg-press",
+   "name": "Leg Press",
+   "category": "legs",
+   "muscles": [
+    "quads",
+    "glutes"
+   ],
+   "pattern": "squat",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -149.3,
+   "y": 326.8,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "romanian-deadlift",
+   "name": "Romanian Deadlift",
+   "category": "legs",
+   "muscles": [
+    "hamstrings",
+    "glutes"
+   ],
+   "pattern": "hip-hinge",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -65.8,
+   "y": 174.8,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "leg-extension",
+   "name": "Leg Extension",
+   "category": "legs",
+   "muscles": [
+    "quads"
+   ],
+   "pattern": "knee-extension",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -110.7,
+   "y": 366.6,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "leg-curl",
+   "name": "Leg Curl",
+   "category": "legs",
+   "muscles": [
+    "hamstrings"
+   ],
+   "pattern": "knee-flexion",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -98.6,
+   "y": 270.7,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "bulgarian-split-squat",
+   "name": "Bulgarian Split Squat",
+   "category": "legs",
+   "muscles": [
+    "quads",
+    "glutes"
+   ],
+   "pattern": "lunge",
+   "equipment": "dumbbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -56.0,
+   "y": 293.1,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "hip-thrust",
+   "name": "Hip Thrust",
+   "category": "glutes",
+   "muscles": [
+    "glutes"
+   ],
+   "pattern": "hip-hinge",
+   "equipment": "barbell",
+   "modality": "weight_reps",
+   "compound": true,
+   "custom": false,
+   "x": -177.6,
+   "y": 140.0,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "calf-raise",
+   "name": "Calf Raise",
+   "category": "legs",
+   "muscles": [
+    "calves"
+   ],
+   "pattern": "plantar-flexion",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -170.4,
+   "y": 294.2,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "cable-crunch",
+   "name": "Cable Crunch",
+   "category": "core",
+   "muscles": [
+    "abs"
+   ],
+   "pattern": "spinal-flexion",
+   "equipment": "cable",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -337.0,
+   "y": -111.7,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "ab-machine-crunch",
+   "name": "Ab Machine Crunch",
+   "category": "core",
+   "muscles": [
+    "abs"
+   ],
+   "pattern": "spinal-flexion",
+   "equipment": "machine",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -283.8,
+   "y": -38.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "hanging-leg-raise",
+   "name": "Hanging Leg Raise",
+   "category": "core",
+   "muscles": [
+    "abs",
+    "hip-flexors"
+   ],
+   "pattern": "hip-flexion",
+   "equipment": "bodyweight",
+   "modality": "reps",
+   "compound": false,
+   "custom": false,
+   "x": -273.2,
+   "y": -81.3,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "weighted-situp",
+   "name": "Weighted Sit-up",
+   "category": "core",
+   "muscles": [
+    "abs"
+   ],
+   "pattern": "spinal-flexion",
+   "equipment": "bodyweight",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -353.8,
+   "y": -47.0,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "plank",
+   "name": "Plank",
+   "category": "core",
+   "muscles": [
+    "core"
+   ],
+   "pattern": "anti-extension",
+   "equipment": "bodyweight",
+   "modality": "time",
+   "compound": false,
+   "custom": false,
+   "x": -316.5,
+   "y": -10.1,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "ab-wheel",
+   "name": "Ab Wheel",
+   "category": "core",
+   "muscles": [
+    "core",
+    "abs"
+   ],
+   "pattern": "anti-extension",
+   "equipment": "other",
+   "modality": "reps",
+   "compound": false,
+   "custom": false,
+   "x": -397.3,
+   "y": -22.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "russian-twist",
+   "name": "Russian Twist",
+   "category": "core",
+   "muscles": [
+    "obliques"
+   ],
+   "pattern": "rotation",
+   "equipment": "bodyweight",
+   "modality": "weight_reps",
+   "compound": false,
+   "custom": false,
+   "x": -386.0,
+   "y": -79.0,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "treadmill",
+   "name": "Treadmill",
+   "category": "cardio",
+   "muscles": [
+    "legs",
+    "cardiovascular"
+   ],
+   "pattern": "gait",
+   "equipment": "machine",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -245.3,
+   "y": -309.8,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "outdoor-run",
+   "name": "Outdoor Run",
+   "category": "cardio",
+   "muscles": [
+    "legs",
+    "cardiovascular"
+   ],
+   "pattern": "gait",
+   "equipment": "none",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -231.4,
+   "y": -206.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "walking",
+   "name": "Walking",
+   "category": "cardio",
+   "muscles": [
+    "legs",
+    "cardiovascular"
+   ],
+   "pattern": "gait",
+   "equipment": "none",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -177.3,
+   "y": -269.0,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "stairmaster",
+   "name": "StairMaster",
+   "category": "cardio",
+   "muscles": [
+    "legs",
+    "glutes",
+    "cardiovascular"
+   ],
+   "pattern": "gait",
+   "equipment": "machine",
+   "modality": "time",
+   "compound": true,
+   "custom": false,
+   "x": -287.8,
+   "y": -260.8,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "cycling",
+   "name": "Cycling",
+   "category": "cardio",
+   "muscles": [
+    "quads",
+    "cardiovascular"
+   ],
+   "pattern": "cyclical",
+   "equipment": "machine",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -187.4,
+   "y": -224.4,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "rowing-machine",
+   "name": "Rowing",
+   "category": "cardio",
+   "muscles": [
+    "mid-back",
+    "legs",
+    "cardiovascular"
+   ],
+   "pattern": "horizontal-pull",
+   "equipment": "machine",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -100.8,
+   "y": -253.8,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "elliptical",
+   "name": "Elliptical",
+   "category": "cardio",
+   "muscles": [
+    "legs",
+    "cardiovascular"
+   ],
+   "pattern": "cyclical",
+   "equipment": "machine",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -164.1,
+   "y": -317.9,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  },
+  {
+   "id": "swimming",
+   "name": "Swimming",
+   "category": "cardio",
+   "muscles": [
+    "full-body",
+    "cardiovascular"
+   ],
+   "pattern": "cyclical",
+   "equipment": "none",
+   "modality": "distance_time",
+   "compound": true,
+   "custom": false,
+   "x": -222.9,
+   "y": -253.2,
+   "performed": false,
+   "times_performed": 0,
+   "last_performed": null,
+   "trend": "insufficient data",
+   "recent_pr": false,
+   "recommended": false
+  }
+ ],
+ "edges": [
+  {
+   "source": "barbell-bench-press",
+   "target": "dumbbell-bench-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "barbell-bench-press",
+   "target": "chest-press-machine",
+   "type": "similar_to"
+  },
+  {
+   "source": "barbell-bench-press",
+   "target": "push-up",
+   "type": "regresses_to"
+  },
+  {
+   "source": "barbell-bench-press",
+   "target": "chest-press-machine",
+   "type": "regresses_to"
+  },
+  {
+   "source": "barbell-bench-press",
+   "target": "barbell-row",
+   "type": "complementary_to"
+  },
+  {
+   "source": "barbell-bench-press",
+   "target": "dumbbell-bench-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "dumbbell-bench-press",
+   "target": "barbell-bench-press",
+   "type": "variation_of"
+  },
+  {
+   "source": "dumbbell-bench-press",
+   "target": "chest-press-machine",
+   "type": "similar_to"
+  },
+  {
+   "source": "dumbbell-bench-press",
+   "target": "barbell-bench-press",
+   "type": "progresses_to"
+  },
+  {
+   "source": "dumbbell-bench-press",
+   "target": "push-up",
+   "type": "regresses_to"
+  },
+  {
+   "source": "dumbbell-bench-press",
+   "target": "dumbbell-row",
+   "type": "complementary_to"
+  },
+  {
+   "source": "incline-bench-press",
+   "target": "barbell-bench-press",
+   "type": "variation_of"
+  },
+  {
+   "source": "incline-bench-press",
+   "target": "incline-dumbbell-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "incline-bench-press",
+   "target": "incline-dumbbell-press",
+   "type": "regresses_to"
+  },
+  {
+   "source": "incline-bench-press",
+   "target": "incline-dumbbell-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "incline-dumbbell-press",
+   "target": "incline-bench-press",
+   "type": "variation_of"
+  },
+  {
+   "source": "incline-dumbbell-press",
+   "target": "dumbbell-bench-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "incline-dumbbell-press",
+   "target": "incline-bench-press",
+   "type": "progresses_to"
+  },
+  {
+   "source": "incline-dumbbell-press",
+   "target": "push-up",
+   "type": "regresses_to"
+  },
+  {
+   "source": "chest-press-machine",
+   "target": "barbell-bench-press",
+   "type": "progresses_to"
+  },
+  {
+   "source": "chest-press-machine",
+   "target": "barbell-bench-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "cable-fly",
+   "target": "pec-deck",
+   "type": "similar_to"
+  },
+  {
+   "source": "cable-fly",
+   "target": "pec-deck",
+   "type": "regresses_to"
+  },
+  {
+   "source": "cable-fly",
+   "target": "barbell-bench-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "cable-fly",
+   "target": "pec-deck",
+   "type": "alternative_to"
+  },
+  {
+   "source": "pec-deck",
+   "target": "cable-fly",
+   "type": "progresses_to"
+  },
+  {
+   "source": "pec-deck",
+   "target": "chest-press-machine",
+   "type": "complementary_to"
+  },
+  {
+   "source": "dips",
+   "target": "close-grip-bench-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "dips",
+   "target": "push-up",
+   "type": "regresses_to"
+  },
+  {
+   "source": "dips",
+   "target": "pull-up",
+   "type": "complementary_to"
+  },
+  {
+   "source": "dips",
+   "target": "close-grip-bench-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "push-up",
+   "target": "barbell-bench-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "push-up",
+   "target": "dips",
+   "type": "progresses_to"
+  },
+  {
+   "source": "push-up",
+   "target": "barbell-bench-press",
+   "type": "progresses_to"
+  },
+  {
+   "source": "push-up",
+   "target": "inverted-row",
+   "type": "complementary_to"
+  },
+  {
+   "source": "push-up",
+   "target": "dumbbell-bench-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "deadlift",
+   "target": "romanian-deadlift",
+   "type": "similar_to"
+  },
+  {
+   "source": "deadlift",
+   "target": "romanian-deadlift",
+   "type": "regresses_to"
+  },
+  {
+   "source": "deadlift",
+   "target": "back-squat",
+   "type": "complementary_to"
+  },
+  {
+   "source": "deadlift",
+   "target": "hip-thrust",
+   "type": "alternative_to"
+  },
+  {
+   "source": "barbell-row",
+   "target": "dumbbell-row",
+   "type": "similar_to"
+  },
+  {
+   "source": "barbell-row",
+   "target": "t-bar-row",
+   "type": "similar_to"
+  },
+  {
+   "source": "barbell-row",
+   "target": "seated-cable-row",
+   "type": "regresses_to"
+  },
+  {
+   "source": "barbell-row",
+   "target": "dumbbell-row",
+   "type": "alternative_to"
+  },
+  {
+   "source": "barbell-row",
+   "target": "seated-cable-row",
+   "type": "alternative_to"
+  },
+  {
+   "source": "dumbbell-row",
+   "target": "barbell-row",
+   "type": "variation_of"
+  },
+  {
+   "source": "dumbbell-row",
+   "target": "seated-cable-row",
+   "type": "similar_to"
+  },
+  {
+   "source": "dumbbell-row",
+   "target": "barbell-row",
+   "type": "progresses_to"
+  },
+  {
+   "source": "lat-pulldown",
+   "target": "pull-up",
+   "type": "similar_to"
+  },
+  {
+   "source": "lat-pulldown",
+   "target": "pull-up",
+   "type": "progresses_to"
+  },
+  {
+   "source": "lat-pulldown",
+   "target": "overhead-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "lat-pulldown",
+   "target": "pull-up",
+   "type": "alternative_to"
+  },
+  {
+   "source": "pull-up",
+   "target": "chin-up",
+   "type": "similar_to"
+  },
+  {
+   "source": "pull-up",
+   "target": "lat-pulldown",
+   "type": "regresses_to"
+  },
+  {
+   "source": "pull-up",
+   "target": "chin-up",
+   "type": "regresses_to"
+  },
+  {
+   "source": "pull-up",
+   "target": "overhead-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "chin-up",
+   "target": "pull-up",
+   "type": "variation_of"
+  },
+  {
+   "source": "chin-up",
+   "target": "lat-pulldown",
+   "type": "similar_to"
+  },
+  {
+   "source": "chin-up",
+   "target": "pull-up",
+   "type": "progresses_to"
+  },
+  {
+   "source": "chin-up",
+   "target": "lat-pulldown",
+   "type": "regresses_to"
+  },
+  {
+   "source": "chin-up",
+   "target": "dips",
+   "type": "complementary_to"
+  },
+  {
+   "source": "chin-up",
+   "target": "lat-pulldown",
+   "type": "alternative_to"
+  },
+  {
+   "source": "seated-cable-row",
+   "target": "barbell-row",
+   "type": "similar_to"
+  },
+  {
+   "source": "seated-cable-row",
+   "target": "t-bar-row",
+   "type": "similar_to"
+  },
+  {
+   "source": "seated-cable-row",
+   "target": "barbell-row",
+   "type": "progresses_to"
+  },
+  {
+   "source": "seated-cable-row",
+   "target": "chest-press-machine",
+   "type": "complementary_to"
+  },
+  {
+   "source": "t-bar-row",
+   "target": "barbell-row",
+   "type": "variation_of"
+  },
+  {
+   "source": "t-bar-row",
+   "target": "seated-cable-row",
+   "type": "regresses_to"
+  },
+  {
+   "source": "t-bar-row",
+   "target": "barbell-row",
+   "type": "alternative_to"
+  },
+  {
+   "source": "inverted-row",
+   "target": "barbell-row",
+   "type": "similar_to"
+  },
+  {
+   "source": "inverted-row",
+   "target": "barbell-row",
+   "type": "progresses_to"
+  },
+  {
+   "source": "inverted-row",
+   "target": "pull-up",
+   "type": "progresses_to"
+  },
+  {
+   "source": "inverted-row",
+   "target": "seated-cable-row",
+   "type": "alternative_to"
+  },
+  {
+   "source": "overhead-press",
+   "target": "dumbbell-shoulder-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "overhead-press",
+   "target": "dumbbell-shoulder-press",
+   "type": "regresses_to"
+  },
+  {
+   "source": "overhead-press",
+   "target": "dumbbell-shoulder-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "dumbbell-shoulder-press",
+   "target": "overhead-press",
+   "type": "variation_of"
+  },
+  {
+   "source": "dumbbell-shoulder-press",
+   "target": "arnold-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "dumbbell-shoulder-press",
+   "target": "overhead-press",
+   "type": "progresses_to"
+  },
+  {
+   "source": "dumbbell-shoulder-press",
+   "target": "lat-pulldown",
+   "type": "complementary_to"
+  },
+  {
+   "source": "arnold-press",
+   "target": "dumbbell-shoulder-press",
+   "type": "variation_of"
+  },
+  {
+   "source": "arnold-press",
+   "target": "overhead-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "arnold-press",
+   "target": "dumbbell-shoulder-press",
+   "type": "regresses_to"
+  },
+  {
+   "source": "arnold-press",
+   "target": "dumbbell-shoulder-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "lateral-raise",
+   "target": "overhead-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "rear-delt-fly",
+   "target": "face-pull",
+   "type": "similar_to"
+  },
+  {
+   "source": "rear-delt-fly",
+   "target": "barbell-bench-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "rear-delt-fly",
+   "target": "face-pull",
+   "type": "alternative_to"
+  },
+  {
+   "source": "face-pull",
+   "target": "overhead-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "face-pull",
+   "target": "barbell-bench-press",
+   "type": "complementary_to"
+  },
+  {
+   "source": "barbell-curl",
+   "target": "dumbbell-curl",
+   "type": "similar_to"
+  },
+  {
+   "source": "barbell-curl",
+   "target": "preacher-curl",
+   "type": "similar_to"
+  },
+  {
+   "source": "barbell-curl",
+   "target": "tricep-pushdown",
+   "type": "complementary_to"
+  },
+  {
+   "source": "barbell-curl",
+   "target": "dumbbell-curl",
+   "type": "alternative_to"
+  },
+  {
+   "source": "dumbbell-curl",
+   "target": "barbell-curl",
+   "type": "variation_of"
+  },
+  {
+   "source": "dumbbell-curl",
+   "target": "hammer-curl",
+   "type": "similar_to"
+  },
+  {
+   "source": "dumbbell-curl",
+   "target": "skull-crushers",
+   "type": "complementary_to"
+  },
+  {
+   "source": "hammer-curl",
+   "target": "dumbbell-curl",
+   "type": "variation_of"
+  },
+  {
+   "source": "hammer-curl",
+   "target": "barbell-curl",
+   "type": "similar_to"
+  },
+  {
+   "source": "hammer-curl",
+   "target": "dumbbell-curl",
+   "type": "alternative_to"
+  },
+  {
+   "source": "preacher-curl",
+   "target": "barbell-curl",
+   "type": "variation_of"
+  },
+  {
+   "source": "preacher-curl",
+   "target": "dumbbell-curl",
+   "type": "similar_to"
+  },
+  {
+   "source": "preacher-curl",
+   "target": "barbell-curl",
+   "type": "alternative_to"
+  },
+  {
+   "source": "tricep-pushdown",
+   "target": "overhead-tricep-extension",
+   "type": "similar_to"
+  },
+  {
+   "source": "tricep-pushdown",
+   "target": "skull-crushers",
+   "type": "alternative_to"
+  },
+  {
+   "source": "skull-crushers",
+   "target": "overhead-tricep-extension",
+   "type": "similar_to"
+  },
+  {
+   "source": "overhead-tricep-extension",
+   "target": "tricep-pushdown",
+   "type": "alternative_to"
+  },
+  {
+   "source": "close-grip-bench-press",
+   "target": "barbell-bench-press",
+   "type": "variation_of"
+  },
+  {
+   "source": "close-grip-bench-press",
+   "target": "tricep-pushdown",
+   "type": "regresses_to"
+  },
+  {
+   "source": "close-grip-bench-press",
+   "target": "barbell-curl",
+   "type": "complementary_to"
+  },
+  {
+   "source": "back-squat",
+   "target": "front-squat",
+   "type": "similar_to"
+  },
+  {
+   "source": "back-squat",
+   "target": "leg-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "back-squat",
+   "target": "leg-press",
+   "type": "regresses_to"
+  },
+  {
+   "source": "back-squat",
+   "target": "bulgarian-split-squat",
+   "type": "regresses_to"
+  },
+  {
+   "source": "back-squat",
+   "target": "leg-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "back-squat",
+   "target": "front-squat",
+   "type": "alternative_to"
+  },
+  {
+   "source": "front-squat",
+   "target": "back-squat",
+   "type": "variation_of"
+  },
+  {
+   "source": "front-squat",
+   "target": "leg-press",
+   "type": "similar_to"
+  },
+  {
+   "source": "front-squat",
+   "target": "leg-press",
+   "type": "regresses_to"
+  },
+  {
+   "source": "leg-press",
+   "target": "back-squat",
+   "type": "progresses_to"
+  },
+  {
+   "source": "leg-press",
+   "target": "leg-curl",
+   "type": "complementary_to"
+  },
+  {
+   "source": "romanian-deadlift",
+   "target": "deadlift",
+   "type": "variation_of"
+  },
+  {
+   "source": "romanian-deadlift",
+   "target": "hip-thrust",
+   "type": "similar_to"
+  },
+  {
+   "source": "romanian-deadlift",
+   "target": "deadlift",
+   "type": "progresses_to"
+  },
+  {
+   "source": "romanian-deadlift",
+   "target": "leg-curl",
+   "type": "regresses_to"
+  },
+  {
+   "source": "romanian-deadlift",
+   "target": "back-squat",
+   "type": "complementary_to"
+  },
+  {
+   "source": "romanian-deadlift",
+   "target": "leg-curl",
+   "type": "alternative_to"
+  },
+  {
+   "source": "leg-extension",
+   "target": "leg-curl",
+   "type": "complementary_to"
+  },
+  {
+   "source": "leg-curl",
+   "target": "romanian-deadlift",
+   "type": "similar_to"
+  },
+  {
+   "source": "leg-curl",
+   "target": "romanian-deadlift",
+   "type": "progresses_to"
+  },
+  {
+   "source": "bulgarian-split-squat",
+   "target": "back-squat",
+   "type": "similar_to"
+  },
+  {
+   "source": "bulgarian-split-squat",
+   "target": "back-squat",
+   "type": "progresses_to"
+  },
+  {
+   "source": "bulgarian-split-squat",
+   "target": "romanian-deadlift",
+   "type": "complementary_to"
+  },
+  {
+   "source": "bulgarian-split-squat",
+   "target": "leg-press",
+   "type": "alternative_to"
+  },
+  {
+   "source": "hip-thrust",
+   "target": "back-squat",
+   "type": "complementary_to"
+  },
+  {
+   "source": "hip-thrust",
+   "target": "romanian-deadlift",
+   "type": "alternative_to"
+  },
+  {
+   "source": "cable-crunch",
+   "target": "ab-machine-crunch",
+   "type": "similar_to"
+  },
+  {
+   "source": "cable-crunch",
+   "target": "ab-machine-crunch",
+   "type": "regresses_to"
+  },
+  {
+   "source": "cable-crunch",
+   "target": "plank",
+   "type": "complementary_to"
+  },
+  {
+   "source": "cable-crunch",
+   "target": "ab-machine-crunch",
+   "type": "alternative_to"
+  },
+  {
+   "source": "ab-machine-crunch",
+   "target": "cable-crunch",
+   "type": "progresses_to"
+  },
+  {
+   "source": "hanging-leg-raise",
+   "target": "weighted-situp",
+   "type": "similar_to"
+  },
+  {
+   "source": "hanging-leg-raise",
+   "target": "weighted-situp",
+   "type": "regresses_to"
+  },
+  {
+   "source": "hanging-leg-raise",
+   "target": "plank",
+   "type": "complementary_to"
+  },
+  {
+   "source": "hanging-leg-raise",
+   "target": "cable-crunch",
+   "type": "alternative_to"
+  },
+  {
+   "source": "weighted-situp",
+   "target": "cable-crunch",
+   "type": "similar_to"
+  },
+  {
+   "source": "weighted-situp",
+   "target": "hanging-leg-raise",
+   "type": "progresses_to"
+  },
+  {
+   "source": "weighted-situp",
+   "target": "ab-machine-crunch",
+   "type": "alternative_to"
+  },
+  {
+   "source": "plank",
+   "target": "ab-wheel",
+   "type": "similar_to"
+  },
+  {
+   "source": "plank",
+   "target": "ab-wheel",
+   "type": "progresses_to"
+  },
+  {
+   "source": "ab-wheel",
+   "target": "plank",
+   "type": "regresses_to"
+  },
+  {
+   "source": "ab-wheel",
+   "target": "plank",
+   "type": "alternative_to"
+  },
+  {
+   "source": "russian-twist",
+   "target": "plank",
+   "type": "complementary_to"
+  },
+  {
+   "source": "treadmill",
+   "target": "outdoor-run",
+   "type": "similar_to"
+  },
+  {
+   "source": "treadmill",
+   "target": "walking",
+   "type": "similar_to"
+  },
+  {
+   "source": "treadmill",
+   "target": "outdoor-run",
+   "type": "progresses_to"
+  },
+  {
+   "source": "treadmill",
+   "target": "walking",
+   "type": "regresses_to"
+  },
+  {
+   "source": "treadmill",
+   "target": "outdoor-run",
+   "type": "alternative_to"
+  },
+  {
+   "source": "treadmill",
+   "target": "elliptical",
+   "type": "alternative_to"
+  },
+  {
+   "source": "outdoor-run",
+   "target": "walking",
+   "type": "regresses_to"
+  },
+  {
+   "source": "walking",
+   "target": "outdoor-run",
+   "type": "progresses_to"
+  },
+  {
+   "source": "walking",
+   "target": "treadmill",
+   "type": "alternative_to"
+  },
+  {
+   "source": "stairmaster",
+   "target": "treadmill",
+   "type": "similar_to"
+  },
+  {
+   "source": "stairmaster",
+   "target": "cycling",
+   "type": "similar_to"
+  },
+  {
+   "source": "stairmaster",
+   "target": "walking",
+   "type": "regresses_to"
+  },
+  {
+   "source": "stairmaster",
+   "target": "treadmill",
+   "type": "alternative_to"
+  },
+  {
+   "source": "cycling",
+   "target": "elliptical",
+   "type": "similar_to"
+  },
+  {
+   "source": "cycling",
+   "target": "elliptical",
+   "type": "alternative_to"
+  },
+  {
+   "source": "cycling",
+   "target": "rowing-machine",
+   "type": "alternative_to"
+  },
+  {
+   "source": "rowing-machine",
+   "target": "cycling",
+   "type": "similar_to"
+  },
+  {
+   "source": "rowing-machine",
+   "target": "swimming",
+   "type": "alternative_to"
+  },
+  {
+   "source": "elliptical",
+   "target": "treadmill",
+   "type": "similar_to"
+  },
+  {
+   "source": "elliptical",
+   "target": "treadmill",
+   "type": "progresses_to"
+  },
+  {
+   "source": "swimming",
+   "target": "rowing-machine",
+   "type": "similar_to"
+  },
+  {
+   "source": "chest-press-machine",
+   "target": "close-grip-bench-press",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "close-grip-bench-press",
+   "target": "dumbbell-bench-press",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "arnold-press",
+   "target": "dips",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "dips",
+   "target": "dumbbell-shoulder-press",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "dumbbell-row",
+   "target": "face-pull",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "face-pull",
+   "target": "inverted-row",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "inverted-row",
+   "target": "rowing-machine",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "rowing-machine",
+   "target": "seated-cable-row",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "hammer-curl",
+   "target": "preacher-curl",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "outdoor-run",
+   "target": "stairmaster",
+   "type": "same_movement_pattern"
+  },
+  {
+   "source": "elliptical",
+   "target": "swimming",
+   "type": "same_movement_pattern"
+  }
+ ]
+}

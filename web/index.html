@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IronGraph — Build strength. Commit progress.</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒️</text></svg>">
+</head>
+<body>
+<div id="app">
+  <nav id="sidebar">
+    <div class="brand">
+      <span class="brand-mark">⚒️</span>
+      <div>
+        <div class="brand-name">IronGraph</div>
+        <div class="brand-sub">build strength · commit progress</div>
+      </div>
+    </div>
+    <div class="nav-items">
+      <button class="nav-item active" data-view="home"><span>⌂</span> Command Center</button>
+      <button class="nav-item" data-view="graph"><span>⬡</span> Exercise Graph</button>
+      <button class="nav-item" data-view="timeline"><span>☰</span> Timeline</button>
+      <button class="nav-item" data-view="vault"><span>🏆</span> PR Vault</button>
+      <button class="nav-item" data-view="achievements"><span>🏅</span> Achievements</button>
+      <button class="nav-item" data-view="coach"><span>✦</span> AI Coach</button>
+    </div>
+    <div class="sidebar-foot">
+      <div id="level-chip" class="level-chip"></div>
+      <div class="hint">⌘K command palette</div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section id="view-home" class="view active"></section>
+    <section id="view-graph" class="view">
+      <div id="graph-wrap">
+        <canvas id="graph-canvas"></canvas>
+        <div id="graph-hud">
+          <input id="graph-search" type="search" placeholder="Find exercise…  (Enter jumps)" autocomplete="off">
+          <div id="graph-chips"></div>
+        </div>
+        <div id="graph-legend"></div>
+        <div id="graph-zoom">
+          <button id="zoom-in" title="Zoom in">+</button>
+          <button id="zoom-fit" title="Fit">▣</button>
+          <button id="zoom-out" title="Zoom out">−</button>
+        </div>
+        <canvas id="minimap" width="200" height="150"></canvas>
+        <div id="graph-help">drag to pan · scroll to zoom · click node to inspect · ←/→ hop neighbors · esc closes</div>
+      </div>
+    </section>
+    <section id="view-timeline" class="view"></section>
+    <section id="view-vault" class="view"></section>
+    <section id="view-achievements" class="view"></section>
+    <section id="view-coach" class="view">
+      <div id="coach-box">
+        <div id="coach-log"></div>
+        <form id="coach-form">
+          <input id="coach-input" placeholder="Ask about an exercise, your history, what to train next…" autocomplete="off">
+          <label class="ground-toggle" title="Ground answers with Google Search (uses Gemini grounding)">
+            <input type="checkbox" id="coach-ground"> 🌐
+          </label>
+          <button type="submit">Ask</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <aside id="detail-panel" class="hidden">
+    <button id="detail-close" title="Close (esc)">×</button>
+    <div id="detail-body"></div>
+  </aside>
+
+  <div id="palette" class="hidden">
+    <input id="palette-input" placeholder="Jump to exercise or view…" autocomplete="off">
+    <div id="palette-results"></div>
+  </div>
+
+  <div id="pr-toast" class="hidden"></div>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
