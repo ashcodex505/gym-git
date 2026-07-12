@@ -252,6 +252,72 @@ def add_exercise(body: NewExercise):
             "files_changed": ["data/registry/custom-exercises.json", "data/graph.json"]}
 
 
+class EditExercise(BaseModel):
+    """All fields optional — only supplied ones change. The id never changes."""
+    name: str | None = Field(default=None, min_length=2, max_length=80)
+    category: str | None = None
+    modality: str | None = None
+    equipment: str | None = None
+    movement_pattern: str | None = None
+    primary_muscles: list[str] | None = None
+    secondary_muscles: list[str] | None = None
+    aliases: list[str] | None = None
+    related: list[str] | None = None   # names/ids → replaces similar_to
+    compound: bool | None = None
+
+
+@app.put("/api/exercises/{ex_id}")
+def edit_exercise(ex_id: str, body: EditExercise):
+    S.refresh()
+    reg = S.registry
+    ex = reg.by_id.get(ex_id)
+    if not ex:
+        raise HTTPException(404, "unknown exercise")
+    if body.category is not None and body.category not in VALID_CATEGORIES:
+        raise HTTPException(422, f"category must be one of: {', '.join(sorted(VALID_CATEGORIES))}")
+    if body.modality is not None and body.modality not in VALID_MODALITIES:
+        raise HTTPException(422, f"modality must be one of: {', '.join(sorted(VALID_MODALITIES))}")
+    if body.name is not None:
+        clash = reg.resolve(body.name.strip())
+        if clash and clash.id != ex_id:
+            raise HTTPException(409, f"'{body.name.strip()}' already belongs to '{clash.name}'")
+
+    unresolved: list[str] = []
+    fields: dict = {}
+    if body.name is not None:
+        fields["name"] = body.name.strip()
+    if body.category is not None:
+        fields["category"] = body.category
+    if body.modality is not None:
+        fields["modality"] = body.modality
+    if body.equipment is not None:
+        fields["equipment"] = body.equipment.strip().lower() or "other"
+    if body.movement_pattern is not None:
+        fields["movement_pattern"] = body.movement_pattern.strip().lower().replace(" ", "-") or "other"
+    _clean = lambda xs: [x.strip().lower().replace(" ", "-") for x in xs if x.strip()][:8]  # noqa: E731
+    if body.primary_muscles is not None:
+        fields["primary_muscles"] = _clean(body.primary_muscles)
+    if body.secondary_muscles is not None:
+        fields["secondary_muscles"] = _clean(body.secondary_muscles)
+    if body.aliases is not None:
+        fields["aliases"] = [a.strip() for a in body.aliases if a.strip()][:6]
+    if body.compound is not None:
+        fields["compound"] = body.compound
+    if body.related is not None:
+        ids = []
+        for r in body.related:
+            hit = reg.resolve(r.strip()) if r.strip() else None
+            (ids.append(hit.id) if hit and hit.id != ex_id else unresolved.append(r.strip()) if r.strip() else None)
+        fields["relations"] = {**ex.relations, "similar_to": ids}
+
+    ex = reg.update_exercise(ex_id, fields)
+    from ..graphbuild import build_graph, write_graph
+    write_graph(build_graph(reg, S.stats))
+    S.mtime = -1.0
+    return {"exercise": ex.to_dict(), "unresolved_related": unresolved,
+            "files_changed": ["data/registry/custom-exercises.json", "data/graph.json"]}
+
+
 class AskBody(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
     exercise_id: str | None = None
@@ -277,4 +343,6 @@ def index():
     return FileResponse(WEB_DIR / "index.html")
 
 
+paths.generated_dir().mkdir(parents=True, exist_ok=True)
+app.mount("/generated", StaticFiles(directory=paths.generated_dir()), name="generated")
 app.mount("/", StaticFiles(directory=WEB_DIR), name="static")

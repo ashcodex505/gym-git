@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "exercises": [
+    {
+      "id": "decline-ab-crunches",
+      "name": "Decline Ab Crunches",
+      "aliases": [],
+      "category": "core",
+      "primary_muscles": [],
+      "secondary_muscles": [],
+      "movement_pattern": "other",
+      "equipment": "other",
+      "modality": "weight_reps",
+      "compound": false,
+      "supports_added_weight": false,
+      "supports_level": false,
+      "custom": true,
+      "instructions": "",
+      "relations": {}
+    }
+  ]
+}

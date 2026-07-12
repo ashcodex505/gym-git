@@ -198,12 +198,14 @@ table.vault tr:hover td { background: rgba(255,255,255,.02); }
 .dp-rel { display: inline-block; margin: 3px 4px 3px 0; padding: 5px 10px; font-size: 12px; border: 1px solid var(--line); border-radius: 16px; cursor: pointer; color: var(--fg); background: var(--card); }
 .dp-rel:hover { border-color: var(--accent); }
 .dp-rel.unperformed { color: var(--muted); border-style: dashed; }
-.dp-video, .dp-ask {
+.dp-video, .dp-ask, .dp-edit {
   display: block; width: 100%; margin-top: 10px; padding: 11px; text-align: center;
   border-radius: 9px; font: 600 13px var(--sans); cursor: pointer; text-decoration: none;
 }
 .dp-video { background: var(--card); border: 1px solid var(--line); color: var(--fg); }
 .dp-video:hover { border-color: var(--blue); color: var(--blue); }
+.dp-edit { background: var(--card); border: 1px solid var(--line); color: var(--fg); }
+.dp-edit:hover { border-color: var(--gold); color: var(--gold); }
 .dp-ask { background: linear-gradient(135deg, rgba(247,129,102,.16), rgba(227,179,65,.14)); border: 1px solid rgba(247,129,102,.45); color: var(--accent-2); }
 .dp-ask:hover { border-color: var(--accent); }
 #dp-spark { width: 100%; height: 74px; margin-top: 4px; }
@@ -243,6 +245,22 @@ table.vault tr:hover td { background: rgba(255,255,255,.02); }
   box-shadow: 0 0 40px rgba(63,185,80,.25); animation: rise .4s ease;
 }
 @keyframes rise { from { opacity: 0; transform: translate(-50%, 16px); } }
+
+/* ---------- hero banner ---------- */
+.hero-banner {
+  display: flex; gap: 22px; align-items: center; margin-bottom: 18px;
+  background: linear-gradient(135deg, var(--card), rgba(247,129,102,.06));
+  border: 1px solid var(--line); border-radius: 14px; padding: 16px 22px;
+}
+.hero-sprite {
+  width: 88px; height: 96px; image-rendering: pixelated;
+  filter: drop-shadow(0 4px 14px rgba(247,129,102,.25));
+}
+.hero-name { font: 800 17px var(--sans); color: var(--accent-2); }
+.hero-armor { font: 11.5px var(--mono); color: var(--muted); margin: 3px 0 9px; }
+.hero-bar { height: 6px; width: 260px; max-width: 50vw; background: var(--line); border-radius: 3px; overflow: hidden; }
+.hero-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.hero-xp { font: 10.5px var(--mono); color: var(--muted); margin-top: 6px; }
 
 /* ---------- add-exercise modal ---------- */
 .chip.add { color: var(--accent-2); border-color: rgba(247,129,102,.5); }

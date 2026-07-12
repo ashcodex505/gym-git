@@ -199,3 +199,41 @@ def test_ai_coach_offline_path(page, server):
     page.fill("#coach-input", "How do I improve my bench press?")
     page.click("#coach-form button[type=submit]")
     expect(page.locator("#coach-log .msg.sys").last).to_contain_text("GEMINI_API_KEY")
+
+
+def test_edit_exercise_from_detail_panel(page, server):
+    page.goto(server["url"] + "/#graph")
+    page.fill("#graph-search", "lateral raise")
+    page.press("#graph-search", "Enter")
+    expect(page.locator(".dp-name")).to_have_text("Lateral Raise")
+    page.click("#dp-edit")
+    expect(page.locator("#add-ex-modal")).to_be_visible()
+    # prefilled from the exercise
+    assert page.locator("#add-ex-form [name=name]").input_value() == "Lateral Raise"
+    assert page.locator("#add-ex-form [name=category]").input_value() == "shoulders"
+    # change equipment + add a relation
+    page.fill("#add-ex-form [name=equipment]", "cable")
+    page.fill("#add-ex-form [name=related]", "Face Pull")
+    page.click("#add-ex-form button.primary")
+    expect(page.locator("#add-ex-modal")).to_be_hidden()
+    expect(page.locator("#pr-toast")).to_contain_text("Lateral Raise updated")
+    # detail panel reflects the change
+    expect(page.locator(".dp-tags")).to_contain_text("cable")
+    # persisted as an override (core file untouched)
+    custom = json.loads((server["root"] / "data/registry/custom-exercises.json").read_text())
+    assert custom["overrides"]["lateral-raise"]["equipment"] == "cable"
+
+
+def test_hero_sprite_served_and_on_home(page, server):
+    import subprocess as sp
+    import sys as _sys
+    # regenerate views so the sprite exists (module server was seeded pre-sprite)
+    sp.run([_sys.executable, "-m", "irongraph.ingest", "--regen"],
+           env={**os.environ, "IRONGRAPH_ROOT": str(server["root"])},
+           cwd=REPO, check=True, capture_output=True)
+    r = page.request.get(server["url"] + "/generated/hero-sprite.gif")
+    assert r.status == 200
+    assert r.body()[:6] == b"GIF89a"
+    page.goto(server["url"])
+    expect(page.locator(".hero-sprite")).to_be_visible()
+    expect(page.locator(".hero-name")).to_contain_text("Level")

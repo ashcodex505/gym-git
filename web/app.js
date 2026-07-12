@@ -55,9 +55,25 @@ async function renderHome() {
   const st = s.streaks;
   const el = $("#view-home");
   const latest = s.latest_workout;
+  const TIER_LADDER = [[1, "cloth"], [5, "leather"], [10, "steel"], [18, "gilded"], [30, "ember-forged"]];
+  let tier = TIER_LADDER[0][1], next = null;
+  for (const [lv, name] of TIER_LADDER) {
+    if (s.level >= lv) tier = name;
+    else if (!next) next = { lv, name };
+  }
   el.innerHTML = `
     <h1>Command Center</h1>
     <div class="sub">every workout is a commit · every PR is a release</div>
+    <div class="hero-banner">
+      <img class="hero-sprite" src="/generated/hero-sprite.gif" alt="your hero"
+           onerror="this.closest('.hero-banner').style.display='none'">
+      <div>
+        <div class="hero-name">Level ${s.level} · ${esc(s.title)}</div>
+        <div class="hero-armor">${tier} armor${next ? ` — ${esc(next.name)} forged at level ${next.lv}` : " — final form"}</div>
+        <div class="hero-bar"><i style="width:${Math.min(100, 100 * xpInLevel / Math.max(xpNeed, 1)).toFixed(0)}%"></i></div>
+        <div class="hero-xp">${s.xp} XP · ${s.xp_next - s.xp} to level ${s.level + 1}</div>
+      </div>
+    </div>
     <div class="grid cols-3">
       <div class="card"><div class="label">Level</div><div class="value accent">${s.level} · ${esc(s.title)}</div>
         <div class="foot">${s.xp} XP — ${s.xp_next - s.xp} to next level</div></div>
@@ -246,6 +262,7 @@ async function openDetail(id, push = true) {
         list.map((r) => `<span class="dp-rel ${r.performed ? "" : "unperformed"}" data-ex="${r.id}">${esc(r.name)}${r.performed ? "" : " ○"}</span>`).join("") + "</div>").join("") : ""}
     <a class="dp-video" href="${esc(d.video.url)}" target="_blank" rel="noopener">
       ▶ ${d.video.kind === "search" ? "Find technique video" : "Watch: " + esc(d.video.title)}</a>
+    <button class="dp-edit" id="dp-edit">✎ Edit exercise details</button>
     <button class="dp-ask" data-ask="${esc(ex.name)}">✦ Ask IronGraph AI about ${esc(ex.name)}</button>`;
 
   $("#detail-panel").classList.remove("hidden");
@@ -260,6 +277,7 @@ async function openDetail(id, push = true) {
       if (graph && graphLoaded && currentView === "graph") graph.select(nid);
       else openDetail(nid);
     }));
+  $("#dp-edit").addEventListener("click", () => openEditModal(ex, d.related));
   $(".dp-ask").addEventListener("click", (e) => {
     showView("coach");
     $("#coach-input").value = `How do I improve my ${e.target.dataset.ask}?`;
@@ -387,11 +405,36 @@ document.addEventListener("keydown", (e) => {
 const APP_VERSION = 3;
 console.info(`IronGraph dashboard app.js v${APP_VERSION}`);
 
+let editingId = null;   // null = add mode; otherwise PUT /api/exercises/{id}
+
 function openAddModal() {
+  editingId = null;
+  $(".aem-title").textContent = "＋ New exercise";
+  $("#add-ex-form button.primary").textContent = "Add to registry";
   $("#add-ex-modal").classList.remove("hidden");
   $("#aem-error").textContent = "";
   $("#add-ex-form").reset();
   $("#add-ex-form [name=name]").focus();
+}
+
+function openEditModal(ex, related) {
+  editingId = ex.id;
+  $(".aem-title").textContent = `✎ Edit ${ex.name}`;
+  $("#add-ex-form button.primary").textContent = "Save changes";
+  $("#aem-error").textContent = "";
+  const f = $("#add-ex-form");
+  f.reset();
+  f.name.value = ex.name;
+  f.category.value = ex.category;
+  f.modality.value = ex.modality;
+  f.equipment.value = ex.equipment === "other" ? "" : ex.equipment;
+  f.movement_pattern.value = ex.movement_pattern === "other" ? "" : ex.movement_pattern;
+  f.primary_muscles.value = ex.primary_muscles.join(", ");
+  f.secondary_muscles.value = ex.secondary_muscles.join(", ");
+  f.related.value = (related?.similar_to || []).map((r) => r.name).join(", ");
+  f.compound.checked = !!ex.compound;
+  $("#add-ex-modal").classList.remove("hidden");
+  f.name.focus();
 }
 // Delegated: survives any DOM timing/rerender, works from any view.
 document.addEventListener("click", (e) => {
@@ -422,23 +465,27 @@ $("#add-ex-form").addEventListener("submit", async (e) => {
     compound: f.get("compound") === "on",
   };
   try {
-    const r = await fetch("/api/exercises", {
-      method: "POST", headers: { "Content-Type": "application/json" },
+    const url = editingId ? `/api/exercises/${editingId}` : "/api/exercises";
+    const r = await fetch(url, {
+      method: editingId ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
     const data = await r.json();
     if (!r.ok) { $("#aem-error").textContent = data.detail || `Error ${r.status}`; return; }
     $("#add-ex-modal").classList.add("hidden");
-    // reload graph data and fly to the new node
+    // reload graph data and focus the node
     const g = await api("/graph");
-    graph.setData(g);
-    renderLegend(g);
-    palItems = [];                       // palette picks up the new exercise
-    graph.select(data.exercise.id);
+    if (graph) { graph.setData(g); renderLegend(g); }
+    palItems = [];                       // palette picks up the change
+    const verb = editingId ? "updated" : "added to the registry";
+    if (graph && currentView === "graph") graph.select(data.exercise.id);
+    else openDetail(data.exercise.id, false);
     const warn = data.unresolved_related.length
       ? `  (couldn't match: ${data.unresolved_related.join(", ")})` : "";
-    toast(`＋ ${data.exercise.name} added to the registry${warn}<br>
+    toast(`${editingId ? "✎" : "＋"} ${data.exercise.name} ${verb}${warn}<br>
       <span style="color:var(--muted);font-size:11px">changed: ${data.files_changed.join(" · ")} — commit &amp; push to persist</span>`);
+    editingId = null;
   } catch (err) {
     $("#aem-error").textContent = err.message;
   }
