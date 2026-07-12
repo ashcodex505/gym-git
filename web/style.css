@@ -244,6 +244,39 @@ table.vault tr:hover td { background: rgba(255,255,255,.02); }
 }
 @keyframes rise { from { opacity: 0; transform: translate(-50%, 16px); } }
 
+/* ---------- add-exercise modal ---------- */
+.chip.add { color: var(--accent-2); border-color: rgba(247,129,102,.5); }
+.chip.add:hover { background: rgba(247,129,102,.15); color: var(--accent-2); }
+#add-ex-modal {
+  position: fixed; inset: 0; z-index: 65; display: flex; align-items: center;
+  justify-content: center; background: rgba(5,7,10,.65); backdrop-filter: blur(3px);
+}
+.aem-box {
+  width: 520px; max-width: 94vw; max-height: 90vh; overflow-y: auto;
+  background: rgba(15,20,27,.98); border: 1px solid var(--line); border-radius: 16px;
+  padding: 24px; box-shadow: 0 24px 70px rgba(0,0,0,.65);
+}
+.aem-title { font-size: 17px; font-weight: 800; }
+.aem-sub { font-size: 11.5px; color: var(--muted); margin: 4px 0 16px; font-family: var(--mono); }
+.aem-sub code { color: var(--accent-2); }
+#add-ex-form label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 12px; letter-spacing: .4px; }
+#add-ex-form input:not([type=checkbox]), #add-ex-form select {
+  display: block; width: 100%; margin-top: 5px; padding: 9px 12px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--card); color: var(--fg);
+  font: 13px var(--sans); outline: none;
+}
+#add-ex-form input:focus, #add-ex-form select:focus { border-color: var(--accent); }
+.aem-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.aem-check { display: flex !important; align-items: center; gap: 8px; font-size: 12.5px !important; color: var(--fg) !important; }
+#aem-error { color: #ff7b72; font-size: 12px; min-height: 16px; margin-bottom: 6px; }
+.aem-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.aem-actions button {
+  padding: 9px 18px; border-radius: 9px; border: 1px solid var(--line);
+  background: var(--card); color: var(--fg); font: 600 13px var(--sans); cursor: pointer;
+}
+.aem-actions button.primary { background: var(--accent); border-color: var(--accent); color: #1a0d09; }
+.aem-actions button:hover { border-color: var(--accent); }
+
 .hidden { display: none !important; }
 
 ::-webkit-scrollbar { width: 9px; height: 9px; }

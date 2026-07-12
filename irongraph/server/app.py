@@ -183,6 +183,66 @@ def achievements():
     }
 
 
+class NewExercise(BaseModel):
+    name: str = Field(min_length=2, max_length=80)
+    category: str = "other"
+    modality: str = "weight_reps"
+    equipment: str = "other"
+    movement_pattern: str = "other"
+    primary_muscles: list[str] = Field(default_factory=list)
+    secondary_muscles: list[str] = Field(default_factory=list)
+    aliases: list[str] = Field(default_factory=list)
+    related: list[str] = Field(default_factory=list)  # names or ids → similar_to
+    compound: bool = False
+
+
+VALID_CATEGORIES = {"chest", "back", "shoulders", "biceps", "triceps", "legs",
+                    "glutes", "core", "cardio", "calisthenics", "mobility", "other"}
+VALID_MODALITIES = {"weight_reps", "reps", "time", "distance_time", "weight_time"}
+
+
+@app.post("/api/exercises", status_code=201)
+def add_exercise(body: NewExercise):
+    """Add a custom exercise from the dashboard. Persists to
+    data/registry/custom-exercises.json and rebuilds data/graph.json —
+    both Git-tracked, so the change survives a push like any workout."""
+    S.refresh()
+    reg = S.registry
+    name = body.name.strip()
+    existing = reg.resolve(name)
+    if existing:
+        raise HTTPException(409, f"'{name}' already exists as '{existing.name}'")
+    if body.category not in VALID_CATEGORIES:
+        raise HTTPException(422, f"category must be one of: {', '.join(sorted(VALID_CATEGORIES))}")
+    if body.modality not in VALID_MODALITIES:
+        raise HTTPException(422, f"modality must be one of: {', '.join(sorted(VALID_MODALITIES))}")
+
+    related_ids, unresolved = [], []
+    for r in body.related:
+        hit = reg.resolve(r.strip()) if r.strip() else None
+        (related_ids.append(hit.id) if hit else unresolved.append(r.strip()))
+
+    _clean = lambda xs: [x.strip().lower().replace(" ", "-") for x in xs if x.strip()][:8]  # noqa: E731
+    ex = reg.register_custom(
+        name,
+        modality=body.modality,  # type: ignore[arg-type]
+        category=body.category,
+        primary_muscles=_clean(body.primary_muscles),
+        secondary_muscles=_clean(body.secondary_muscles),
+        equipment=body.equipment.strip().lower() or "other",
+        movement_pattern=body.movement_pattern.strip().lower().replace(" ", "-") or "other",
+        aliases=[a.strip() for a in body.aliases if a.strip()][:6],
+        relations={"similar_to": related_ids} if related_ids else None,
+        compound=body.compound,
+    )
+    # rebuild the graph so the new node appears (and is committable)
+    from ..graphbuild import build_graph, write_graph
+    write_graph(build_graph(reg, S.stats))
+    S.mtime = -1.0  # force refresh on next read
+    return {"exercise": ex.to_dict(), "unresolved_related": unresolved,
+            "files_changed": ["data/registry/custom-exercises.json", "data/graph.json"]}
+
+
 class AskBody(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
     exercise_id: str | None = None

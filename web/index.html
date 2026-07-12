@@ -39,6 +39,7 @@
         <div id="graph-hud">
           <input id="graph-search" type="search" placeholder="Find exercise…  (Enter jumps)" autocomplete="off">
           <div id="graph-chips"></div>
+          <button id="add-ex-btn" class="chip add" title="Add a custom exercise to the registry">＋ add exercise</button>
         </div>
         <div id="graph-legend"></div>
         <div id="graph-zoom">
@@ -78,6 +79,48 @@
   </div>
 
   <div id="pr-toast" class="hidden"></div>
+
+  <div id="add-ex-modal" class="hidden">
+    <div class="aem-box">
+      <div class="aem-title">＋ New exercise</div>
+      <div class="aem-sub">Saved to <code>data/registry/custom-exercises.json</code> — commit &amp; push to keep it forever.</div>
+      <form id="add-ex-form">
+        <label>Name *<input name="name" required minlength="2" maxlength="80" placeholder="Landmine Press" autocomplete="off"></label>
+        <div class="aem-row">
+          <label>Category *
+            <select name="category">
+              <option>chest</option><option>back</option><option>shoulders</option>
+              <option>biceps</option><option>triceps</option><option>legs</option>
+              <option>glutes</option><option>core</option><option>cardio</option>
+              <option>calisthenics</option><option>mobility</option><option selected>other</option>
+            </select></label>
+          <label>Tracked as *
+            <select name="modality">
+              <option value="weight_reps" selected>weight × reps</option>
+              <option value="reps">reps only</option>
+              <option value="time">time</option>
+              <option value="distance_time">distance + time</option>
+              <option value="weight_time">weight + time</option>
+            </select></label>
+        </div>
+        <div class="aem-row">
+          <label>Equipment<input name="equipment" placeholder="barbell / dumbbell / cable / machine / bodyweight" autocomplete="off"></label>
+          <label>Movement pattern<input name="movement_pattern" placeholder="horizontal-push, hip-hinge…" autocomplete="off"></label>
+        </div>
+        <div class="aem-row">
+          <label>Primary muscles<input name="primary_muscles" placeholder="shoulders, triceps (comma-sep)" autocomplete="off"></label>
+          <label>Secondary muscles<input name="secondary_muscles" placeholder="core (comma-sep)" autocomplete="off"></label>
+        </div>
+        <label>Similar to (existing exercises, comma-sep)<input name="related" placeholder="Overhead Press, Incline Bench Press" autocomplete="off"></label>
+        <label class="aem-check"><input type="checkbox" name="compound"> compound movement</label>
+        <div id="aem-error"></div>
+        <div class="aem-actions">
+          <button type="button" id="aem-cancel">Cancel</button>
+          <button type="submit" class="primary">Add to registry</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 <script type="module" src="app.js"></script>
 </body>

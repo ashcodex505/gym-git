@@ -69,18 +69,32 @@ class Registry:
         primary_muscles: list[str] | None = None,
         equipment: str = "other",
         movement_pattern: str = "other",
+        secondary_muscles: list[str] | None = None,
+        aliases: list[str] | None = None,
+        relations: dict[str, list[str]] | None = None,
+        instructions: str = "",
+        compound: bool = False,
     ) -> Exercise:
-        """Create (and persist) a custom exercise for an unknown name."""
+        """Create (and persist) a custom exercise for an unknown name.
+        Relation targets must be existing exercise ids (unknown ones are
+        dropped so a bad reference can never corrupt the graph)."""
         base = _slug(name)
         eid = base
         n = 2
         while eid in self.by_id:
             eid = f"{base}-{n}"
             n += 1
+        clean_rel: dict[str, list[str]] = {}
+        for rtype, targets in (relations or {}).items():
+            valid = [t for t in targets if t in self.by_id]
+            if valid:
+                clean_rel[rtype] = valid
         ex = Exercise(
             id=eid, name=name.strip(), category=category,
             primary_muscles=primary_muscles or [], equipment=equipment,
             movement_pattern=movement_pattern, modality=modality, custom=True,
+            secondary_muscles=secondary_muscles or [], aliases=aliases or [],
+            relations=clean_rel, instructions=instructions[:2000], compound=compound,
         )
         self.add(ex, persist=True)
         return ex

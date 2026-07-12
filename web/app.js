@@ -363,6 +363,7 @@ document.addEventListener("keydown", (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); return; }
   if (e.target.matches("input, textarea")) return;
   if (e.key === "Escape") {
+    if (!$("#add-ex-modal").classList.contains("hidden")) return $("#add-ex-modal").classList.add("hidden");
     if (!$("#palette").classList.contains("hidden")) return closePalette();
     if (!$("#detail-panel").classList.contains("hidden")) return closeDetail();
   }
@@ -378,10 +379,71 @@ document.addEventListener("keydown", (e) => {
   if (num >= 1 && num <= views.length && !e.metaKey && !e.ctrlKey) showView(views[num - 1]);
 });
 
+// ---------------------------------------------------------------- add exercise
+$("#add-ex-btn")?.addEventListener("click", () => {
+  $("#add-ex-modal").classList.remove("hidden");
+  $("#aem-error").textContent = "";
+  $("#add-ex-form").reset();
+  $("#add-ex-form [name=name]").focus();
+});
+$("#aem-cancel").addEventListener("click", () => $("#add-ex-modal").classList.add("hidden"));
+$("#add-ex-modal").addEventListener("click", (e) => {
+  if (e.target.id === "add-ex-modal") $("#add-ex-modal").classList.add("hidden");
+});
+$("#add-ex-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const csv = (k) => (f.get(k) || "").split(",").map((s) => s.trim()).filter(Boolean);
+  const body = {
+    name: (f.get("name") || "").trim(),
+    category: f.get("category"),
+    modality: f.get("modality"),
+    equipment: (f.get("equipment") || "").trim() || "other",
+    movement_pattern: (f.get("movement_pattern") || "").trim() || "other",
+    primary_muscles: csv("primary_muscles"),
+    secondary_muscles: csv("secondary_muscles"),
+    related: csv("related"),
+    compound: f.get("compound") === "on",
+  };
+  try {
+    const r = await fetch("/api/exercises", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const data = await r.json();
+    if (!r.ok) { $("#aem-error").textContent = data.detail || `Error ${r.status}`; return; }
+    $("#add-ex-modal").classList.add("hidden");
+    // reload graph data and fly to the new node
+    const g = await api("/graph");
+    graph.setData(g);
+    renderLegend(g);
+    palItems = [];                       // palette picks up the new exercise
+    graph.select(data.exercise.id);
+    const warn = data.unresolved_related.length
+      ? `  (couldn't match: ${data.unresolved_related.join(", ")})` : "";
+    toast(`＋ ${data.exercise.name} added to the registry${warn}<br>
+      <span style="color:var(--muted);font-size:11px">changed: ${data.files_changed.join(" · ")} — commit &amp; push to persist</span>`);
+  } catch (err) {
+    $("#aem-error").textContent = err.message;
+  }
+});
+function toast(html) {
+  const t = $("#pr-toast");
+  t.innerHTML = html;
+  t.classList.remove("hidden");
+  clearTimeout(t._h);
+  t._h = setTimeout(() => t.classList.add("hidden"), 6000);
+}
+
 // boot — support #graph, #vault, … deep links
 window.addEventListener("hashchange", () => {
   const v = location.hash.slice(1);
   if (views.includes(v)) showView(v);
 });
 const boot = location.hash.slice(1);
-showView(views.includes(boot) ? boot : "home");
+if (boot === "graph/add") {           // deep link straight into the add-exercise form
+  showView("graph");
+  setTimeout(() => $("#add-ex-btn").click(), 400);
+} else {
+  showView(views.includes(boot) ? boot : "home");
+}
