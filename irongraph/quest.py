@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
@@ -93,8 +94,21 @@ def build_quest(today: date | None = None) -> tuple[str, str]:
         f"<!-- irongraph:quest date={d.isoformat()} -->",
         f"### ⚔️ Daily Quest · {d.strftime('%A, %B %-d, %Y')}",
         "",
+    ]
+    # In GitHub Actions we know the repo — show the hero sprite in the quest
+    repo = os.environ.get("GITHUB_REPOSITORY", "")
+    branch = os.environ.get("GITHUB_REF_NAME", "main") or "main"
+    if repo:
+        lines += [
+            f'<img src="https://raw.githubusercontent.com/{repo}/{branch}/generated/hero-sprite.gif" '
+            'width="88" align="left" alt="your hero">',
+            "",
+        ]
+    lines += [
         f"> **Level {prof.get('level', 1)} {prof.get('title', 'Novice')}** · "
         f"{prof.get('xp', 0)} XP · next level at {xp_for_level(prof.get('level', 1) + 1)} XP",
+        "",
+        '<br clear="left">' if repo else "",
         "",
         EXAMPLES,
     ]

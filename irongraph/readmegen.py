@@ -116,6 +116,18 @@ def build_readme(*, stats_summary: dict, events: list[WorkoutEvent],
                  featured_charts: list[str]) -> str:
     parts = [HERO]
 
+    level = stats_summary.get("level", 1)
+    title = stats_summary.get("title", "Novice")
+    xp = stats_summary.get("xp", 0)
+    parts.append(
+        '<div align="center">\n\n'
+        f'<img src="generated/hero-sprite.gif" alt="Level {level} {title} — the IronGraph hero" width="110">\n\n'
+        f"**Level {level} · {title}** — {xp} XP\n\n"
+        "<sub>The hero's armor is forged by training: cloth → leather → steel → gold → ember.\n"
+        "Every workout commit levels him up.</sub>\n\n"
+        "</div>\n"
+    )
+
     parts.append('<div align="center">\n\n'
                  '<img src="generated/strength-overview.svg" alt="Strength overview" width="860">\n\n'
                  '<img src="generated/workout-heatmap.svg" alt="Training heatmap" width="860">\n\n'

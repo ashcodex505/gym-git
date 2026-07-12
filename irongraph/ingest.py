@@ -132,6 +132,10 @@ def regenerate_all(registry: Registry | None = None) -> dict:
     svggen.write("muscle-distribution.svg", svggen.muscle_distribution(muscle_distribution(events, registry)))
     svggen.write("achievements.svg", svggen.achievements_card(unlocked["unlocked"], len(ach.ACHIEVEMENTS)))
 
+    # ---- hero sprite (level-tier pixel art) -------------------------------
+    from .sprites import generate_hero
+    generate_hero(prof.get("level", 1), paths.generated_dir() / "hero-sprite.gif")
+
     featured_charts = []
     for ex_id, stx in ex_stats.items():
         exd = registry.by_id.get(ex_id)

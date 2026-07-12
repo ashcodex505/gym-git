@@ -20,6 +20,17 @@ authored by the person who performed it.
 
 <div align="center">
 
+<img src="generated/hero-sprite.gif" alt="Level 1 Novice — the IronGraph hero" width="110">
+
+**Level 1 · Novice** — 0 XP
+
+<sub>The hero's armor is forged by training: cloth → leather → steel → gold → ember.
+Every workout commit levels him up.</sub>
+
+</div>
+
+<div align="center">
+
 <img src="generated/strength-overview.svg" alt="Strength overview" width="860">
 
 <img src="generated/workout-heatmap.svg" alt="Training heatmap" width="860">
