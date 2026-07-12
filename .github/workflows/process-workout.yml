@@ -1,0 +1,148 @@
+# Turns a completed quest issue into a verified, human-authored commit.
+#
+# Trigger: closing a daily-quest issue (normal path) or applying the
+# `log-workout` label (lets you log without closing, e.g. to re-run after
+# a fix). Ingestion is idempotent — the issue number is the durable key,
+# so re-runs and double-triggers can never record a workout twice.
+#
+# Security notes:
+# - issue body is written to a file and parsed in Python; it never touches
+#   a shell and never becomes a command argument
+# - permissions are least-privilege (contents+issues write only)
+# - concurrency group serializes ingestion so two closes can't race a push
+name: Process Workout
+
+on:
+  issues:
+    types: [closed, labeled]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: process-workout
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    if: |
+      contains(github.event.issue.labels.*.name, 'daily-quest') &&
+      (github.event.action == 'closed' ||
+       (github.event.action == 'labeled' && github.event.label.name == 'log-workout'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install IronGraph
+        run: pip install -q pyyaml
+
+      - name: Write issue body to file (never through a shell)
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: printf '%s' "$ISSUE_BODY" > /tmp/issue_body.md
+
+      - name: Extract quest date from issue body
+        id: qdate
+        run: |
+          DATE=$(grep -oE 'irongraph:quest date=[0-9-]+' /tmp/issue_body.md | head -1 | cut -d= -f2 || true)
+          if [ -z "$DATE" ]; then DATE=$(TZ=America/Phoenix date +%Y-%m-%d); fi
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Ingest workout
+        id: ingest
+        continue-on-error: true
+        run: |
+          python -m irongraph.ingest \
+            --issue-number "${{ github.event.issue.number }}" \
+            --issue-body-file /tmp/issue_body.md \
+            --issue-url "${{ github.event.issue.html_url }}" \
+            --date "${{ steps.qdate.outputs.date }}" \
+            --summary-file /tmp/summary.json
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Read result
+        id: result
+        run: |
+          STATUS=$(python -c "import json;print(json.load(open('/tmp/summary.json'))['status'])" 2>/dev/null || echo error)
+          echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+
+      - name: Commit workout (authored by the human, verified)
+        if: steps.result.outputs.status == 'ok'
+        run: |
+          python - <<'PY'
+          import json
+          s = json.load(open("/tmp/summary.json"))
+          open("/tmp/subject.txt", "w").write(s["commit_subject"])
+          open("/tmp/body.txt", "w").write(s["commit_body"])
+          PY
+          python -m irongraph.gitcommit --subject-file /tmp/subject.txt --body-file /tmp/body.txt
+          git push origin HEAD:${{ github.event.repository.default_branch }}
+
+      - name: Comment success
+        if: steps.result.outputs.status == 'ok'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          s = json.load(open("/tmp/summary.json"))
+          lines = ["## ⚔️ Quest complete!", "",
+                   f"Recorded **{s['entries']} exercise(s)** for {s['date']} and committed as "
+                   f"**Ashish Kurse** — this workout is now part of your Git history."]
+          if s["prs"]:
+              lines += ["", "### 🏆 New personal records"]
+              for p in s["prs"]:
+                  extra = f" ({p['delta']} vs {p['previous']})" if p.get("delta") else ""
+                  lines.append(f"- **{p['exercise']}** — {p['display']}{extra}")
+          if s["achievements"]:
+              lines += ["", "### 🏅 Achievements unlocked"]
+              lines += [f"- {a['emoji']} **{a['name']}**" for a in s["achievements"]]
+          xp = sum(s["xp"].values())
+          lines += ["", f"**+{xp} XP** → Level {s['level']} {s['title']}"]
+          if s.get("new_custom_exercises"):
+              lines += ["", f"🆕 Added custom exercise(s): {', '.join(s['new_custom_exercises'])}"]
+          open("/tmp/comment.md", "w").write("\n".join(lines))
+          PY
+          gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/comment.md
+          gh issue edit "${{ github.event.issue.number }}" --remove-label awaiting-log,needs-fix 2>/dev/null || true
+
+      - name: Comment validation problems and reopen
+        if: steps.result.outputs.status == 'invalid'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import json
+          s = json.load(open("/tmp/summary.json"))
+          lines = ["## ⚠️ Quest not recorded yet", "",
+                   "Your entries are safe in this issue — nothing was lost, and no bad data was committed.",
+                   "Here's what needs fixing:", ""]
+          lines += [f"- {p}" for p in s["problems"]]
+          lines += ["", "Fix the lines above (edit this issue), then **close it again** or "
+                    "re-apply the `log-workout` label to retry."]
+          open("/tmp/comment.md", "w").write("\n".join(lines))
+          PY
+          gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/comment.md
+          gh issue reopen "${{ github.event.issue.number }}" 2>/dev/null || true
+          gh issue edit "${{ github.event.issue.number }}" --add-label needs-fix 2>/dev/null || true
+
+      - name: Fail loudly on unexpected error
+        if: steps.result.outputs.status == 'error'
+        run: |
+          echo "::error::Ingestion crashed without producing a summary — see the Ingest step log."
+          exit 1
+
+      - name: Comment duplicate (idempotency)
+        if: steps.result.outputs.status == 'duplicate'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" \
+            --body "💤 This quest was already recorded — duplicate processing skipped (idempotent by issue number)."

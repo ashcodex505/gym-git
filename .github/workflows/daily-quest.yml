@@ -1,0 +1,67 @@
+# Creates the nightly workout quest issue.
+#
+# 21:07 America/Phoenix — Arizona never observes DST, so local time is a
+# constant UTC-7 and one cron entry is exact year-round. :07 (not :00)
+# because GitHub's cron queue is congested on the hour and events can be
+# delayed or dropped; off-hour schedules fire far more reliably.
+name: Daily Quest
+
+on:
+  schedule:
+    - cron: "7 4 * * *"   # 04:07 UTC == 21:07 America/Phoenix
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+  contents: read
+
+concurrency:
+  group: daily-quest
+  cancel-in-progress: false
+
+jobs:
+  create-quest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install IronGraph
+        run: pip install -q pyyaml
+
+      - name: Skip if today's quest already exists
+        id: dedupe
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TODAY=$(TZ=America/Phoenix date +%Y-%m-%d)
+          echo "today=$TODAY" >> "$GITHUB_OUTPUT"
+          EXISTING=$(gh issue list --repo "$GITHUB_REPOSITORY" --label daily-quest \
+            --state open --search "in:body irongraph:quest date=$TODAY" --json number --jq length)
+          echo "exists=$EXISTING" >> "$GITHUB_OUTPUT"
+
+      - name: Create quest issue
+        if: steps.dedupe.outputs.exists == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python -m irongraph.quest --json --date "${{ steps.dedupe.outputs.today }}" > quest.json
+          python - <<'PY'
+          import json
+          q = json.load(open("quest.json"))
+          open("quest_title.txt", "w").write(q["title"])
+          open("quest_body.md", "w").write(q["body"])
+          PY
+          gh label create daily-quest --color F78166 --description "Nightly workout quest" --force
+          gh label create workout --color 3FB950 --description "Workout log" --force
+          gh label create awaiting-log --color E3B341 --description "Waiting for workout data" --force
+          gh label create log-workout --color 2EA043 --description "Trigger workout ingestion" --force
+          gh label create needs-fix --color D73A49 --description "Workout data needs correction" --force
+          gh issue create \
+            --title "$(cat quest_title.txt)" \
+            --body-file quest_body.md \
+            --label daily-quest,workout,awaiting-log \
+            --assignee "${{ github.repository_owner }}"
