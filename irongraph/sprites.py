@@ -221,8 +221,10 @@ def _lzw_encode(indices: list[int], min_code_size: int) -> bytes:
 
 
 def write_gif(path: Path, frames: list[list[int]], w: int, h: int,
-              palette: list[tuple[int, int, int]], delay_cs: int) -> None:
-    """frames = per-frame flat index lists; index 0 is transparent."""
+              palette: list[tuple[int, int, int]], delay_cs: int,
+              transparent: bool = True) -> None:
+    """frames = per-frame flat index lists; index 0 is transparent
+    (or the opaque background color when transparent=False)."""
     ncolors = max(4, 1 << (len(palette) - 1).bit_length())
     table = list(palette) + [(0, 0, 0)] * (ncolors - len(palette))
     depth = ncolors.bit_length() - 1
@@ -233,8 +235,9 @@ def write_gif(path: Path, frames: list[list[int]], w: int, h: int,
         buf += bytes((r, g, b))
     buf += b"\x21\xff\x0bNETSCAPE2.0\x03\x01\x00\x00\x00"  # loop forever
     min_code = max(2, depth)
+    gce_flags = 0x09 if transparent else 0x08   # disposal 2, ±transparency
     for fr in frames:
-        buf += b"\x21\xf9\x04" + bytes((0x09,)) + struct.pack("<H", delay_cs) + b"\x00\x00"
+        buf += b"\x21\xf9\x04" + bytes((gce_flags,)) + struct.pack("<H", delay_cs) + b"\x00\x00"
         buf += b"\x2c" + struct.pack("<HHHH", 0, 0, w, h) + bytes((0,))
         data = _lzw_encode(fr, min_code)
         buf += bytes((min_code,))
@@ -520,8 +523,244 @@ def generate_sprite(name: str, out_gif: Path, scale: int = 5) -> None:
 
 
 def generate_all(level: int, outdir: Path) -> None:
-    """Regenerate the hero (level-dependent) and the full sprite set."""
+    """Regenerate the hero + scene (level-dependent) and the full sprite set."""
     generate_hero(level, outdir / "hero-sprite.gif")
+    generate_scene(level, outdir / "scene.gif")
     sprite_dir = outdir / "sprites"
-    for name in LIBRARY:
+    for name in list(LIBRARY):
         generate_sprite(name, sprite_dir / f"{name}.gif")
+    generate_gems(sprite_dir)
+    generate_frame9(sprite_dir / "frame9.png")
+
+
+# ======================================================================
+# Terraria-grade expansion: HUD elements, creatures, UI frame, and the
+# composited night-forge SCENE that headlines the README.
+# All art original, drawn in Terraria's visual grammar (hearts, mana
+# stars, slot frames) — no game assets are copied.
+# ======================================================================
+
+HEART_F1 = """
+............
+..RR....RR..
+.RrrR..RrrR.
+.RrrrRRrrrR.
+.RrrrrrrrrR.
+.RRrrrrrrRR.
+..RRrrrrRR..
+...RRrrRR...
+....RRRR....
+.....RR.....
+............
+"""
+HEART_F2 = HEART_F1.replace(".RrrR..RrrR.", ".RrWR..RrrR.")
+HEART = {"frames": [HEART_F1, HEART_F2], "delay": 55, "palette": {
+    "R": (178, 34, 52), "r": (239, 68, 90), "W": (255, 200, 205)}}
+HEART_EMPTY = {"frames": [HEART_F1], "delay": 100, "palette": {
+    "R": (52, 58, 68), "r": (30, 34, 42), "W": (52, 58, 68)}}
+
+STAR_F1 = """
+...........
+.....B.....
+.....B.....
+....BbB....
+.BBBbWbBBB.
+....BbB....
+.....B.....
+.....B.....
+...........
+"""
+STAR_F2 = """
+...........
+.....B.....
+.....b.....
+....BWB....
+..BbWwWbB..
+....BWB....
+.....b.....
+.....B.....
+...........
+"""
+STAR = {"frames": [STAR_F1, STAR_F2], "delay": 45, "palette": {
+    "B": (88, 120, 255), "b": (121, 160, 255), "W": (200, 215, 255), "w": (240, 246, 252)}}
+STAR_EMPTY = {"frames": [STAR_F1], "delay": 100, "palette": {
+    "B": (44, 50, 62), "b": (34, 38, 48), "W": (44, 50, 62), "w": (44, 50, 62)}}
+
+SLIME_F1 = """
+..............
+....gggggg....
+..gggggggggg..
+.gGGggggggGg..
+.gGGgEgEggGgg.
+.ggggggggggggg
+.gggggggggggg.
+..............
+"""
+SLIME_F2 = """
+..............
+..............
+...gggggggg...
+..gGGggggggg..
+.gGGgEgEggGgg.
+.ggggggggggggg
+gggggggggggggg
+..............
+"""
+SLIME = {"frames": [SLIME_F1, SLIME_F2], "delay": 38, "palette": {
+    "g": (63, 185, 80), "G": (120, 220, 130), "E": (16, 20, 26)}}
+
+TORCH_F1 = """
+........
+...ff...
+..fFFf..
+...FF...
+...WW...
+...WW...
+...WW...
+...WW...
+...WW...
+..WWWW..
+........
+"""
+TORCH_F2 = TORCH_F1.replace("...ff...", "..ff....").replace("..fFFf..", "..fFFf..")
+TORCH_F3 = TORCH_F1.replace("...ff...", "....ff..")
+TORCH = {"frames": [TORCH_F1, TORCH_F2, TORCH_F3], "delay": 20, "palette": {
+    "f": FLAME_Y, "F": EMBER, "W": WOOD}}
+
+GEM_ART = """
+..........
+...CCCC...
+..CccccC..
+.CcccWccC.
+.CcccccC..
+..CcccC...
+...CcC....
+....C.....
+..........
+"""
+# matches web/graph.js CLUSTER_COLORS so legend gems == node colors
+GEM_COLORS = {
+    "chest": (247, 129, 102), "back": (88, 166, 255), "shoulders": (227, 179, 65),
+    "biceps": (188, 140, 255), "triceps": (210, 168, 255), "legs": (63, 185, 80),
+    "glutes": (86, 211, 100), "core": (242, 204, 96), "cardio": (255, 123, 114),
+    "calisthenics": (121, 192, 255), "mobility": (165, 214, 255), "other": (139, 148, 158),
+}
+
+LIBRARY.update({"heart": HEART, "heart-empty": HEART_EMPTY, "star": STAR,
+                "star-empty": STAR_EMPTY, "slime": SLIME, "torch": TORCH})
+
+
+def generate_gems(outdir: Path, scale: int = 4) -> None:
+    for cat, (r, g, b) in GEM_COLORS.items():
+        dark = (max(r - 90, 10), max(g - 90, 10), max(b - 90, 10))
+        spec = {"frames": [GEM_ART], "delay": 100, "palette": {
+            "C": dark, "c": (r, g, b), "W": (240, 246, 252)}}
+        LIBRARY[f"gem-{cat}"] = spec
+        generate_sprite(f"gem-{cat}", outdir / f"gem-{cat}.gif", scale=scale)
+        del LIBRARY[f"gem-{cat}"]
+
+
+# ----------------------------------------------------------- 9-slice frame
+def generate_frame9(out_png: Path, size: int = 30) -> None:
+    """Terraria-style slot/panel frame for CSS border-image: dark outline,
+    steel bevel, gold-notched corners, transparent center."""
+    steel, steel_d = (96, 106, 122), (62, 70, 84)
+    hi = (150, 160, 176)
+    gold, gold_d = (227, 179, 65), (166, 124, 38)
+    outline = (16, 20, 28, 255)
+    rows = []
+    for y in range(size):
+        row = []
+        for x in range(size):
+            d = min(x, y, size - 1 - x, size - 1 - y)
+            in_corner = min(x, size - 1 - x) < 9 and min(y, size - 1 - y) < 9
+            if d >= 8:
+                row.append((0, 0, 0, 0))
+            elif d == 0 or d == 7:
+                row.append(outline)
+            elif d == 1:
+                row.append((*(gold_d if in_corner else steel_d), 255))
+            elif d in (2, 3):
+                row.append((*(gold if in_corner else steel), 255))
+            elif d == 4:
+                row.append((*(gold if in_corner else hi), 255))
+            else:
+                row.append((*(gold_d if in_corner else steel_d), 255))
+        rows.append(row)
+    write_png(out_png, rows)
+
+
+# ----------------------------------------------------------------- scene
+SCENE_W, SCENE_H = 68, 40
+STAR_SPOTS = [(3, 2), (9, 6), (15, 3), (22, 5), (30, 2), (37, 6), (44, 3),
+              (52, 7), (61, 5), (65, 2), (12, 10), (33, 9), (56, 11), (6, 13)]
+
+
+def _blit(grid: list[list[str]], art: str, ox: int, oy: int) -> None:
+    for dy, row in enumerate(_grid_free(art)):
+        for dx, ch in enumerate(row):
+            if ch == "." or not (0 <= oy + dy < SCENE_H and 0 <= ox + dx < SCENE_W):
+                continue
+            grid[oy + dy][ox + dx] = ch
+
+
+def build_scene_frame(hero_art: str, level: int, tick: int) -> list[str]:
+    grid = [["." for _ in range(SCENE_W)] for _ in range(SCENE_H)]
+    # night sky — twinkling stars + moon
+    for i, (x, y) in enumerate(STAR_SPOTS):
+        grid[y][x] = "*" if (i + tick) % 3 else ","
+    for dy, row in enumerate(["..OOO.", ".OOOOO", "OOOOOo", "OOOOoo", ".OOoo.", "..oo.."]):
+        for dx, ch in enumerate(row):
+            if ch != ".":
+                grid[2 + dy][58 + dx] = ch
+    # terrain — grass line, dirt with buried stone
+    import random as _rnd
+    rng = _rnd.Random(77)
+    for x in range(SCENE_W):
+        grid[32][x] = "g"
+        if rng.random() < 0.18:
+            grid[31][x] = "g"          # grass tufts
+        for y in range(33, SCENE_H):
+            grid[y][x] = "r" if rng.random() < 0.07 else ("D" if y > 36 else "d")
+    # set pieces (forge's A/a anvil chars are remapped to n/m so they can't
+    # collide with the hero's aura char in the merged scene palette)
+    torch_frames = [TORCH_F1, TORCH_F2, TORCH_F3]
+    _blit(grid, torch_frames[tick % 3], 6, 21)
+    forge = (FORGE_F1 if tick % 2 else FORGE_F2).replace("A", "n").replace("a", "m")
+    _blit(grid, forge, 45, 20)
+    if _has_aura(level):
+        hero_rows = "\n".join(_add_aura(_grid(hero_art)))
+    else:
+        hero_rows = "\n".join(_grid(hero_art))
+    _blit(grid, hero_rows, 22, 8)
+    return ["".join(r) for r in grid]
+
+
+SCENE_PALETTE_EXTRA = {
+    "*": (240, 246, 252), ",": (110, 125, 160),
+    "O": (222, 216, 190), "o": (170, 164, 142),
+    "g": (76, 175, 80), "d": (110, 74, 46), "D": (86, 56, 34), "r": (96, 106, 122),
+    "f": FLAME_Y, "F": EMBER, "W": WOOD,
+    "n": (110, 122, 140), "m": (74, 84, 100),   # anvil steel (remapped from A/a)
+    "A": EMBER_D,                                # titan aura, ember-toned at night
+}
+NIGHT_SKY = (11, 14, 26)
+
+
+def generate_scene(level: int, out_gif: Path, scale: int = 5) -> None:
+    pal_map = {**_palette_for(level), **SCENE_PALETTE_EXTRA}
+    chars = sorted(pal_map)
+    palette = [NIGHT_SKY] + [pal_map[c] for c in chars]
+    index_of = {c: i + 1 for i, c in enumerate(chars)}
+    frames = []
+    for tick, hero_art in enumerate(CYCLE):
+        rows = build_scene_frame(hero_art, level, tick)
+        flat: list[int] = []
+        for row in rows:
+            line = [index_of.get(ch, 0) for ch in row]
+            scaled = [i for i in line for _ in range(scale)]
+            for _ in range(scale):
+                flat.extend(scaled)
+        frames.append(flat)
+    write_gif(out_gif, frames, SCENE_W * scale, SCENE_H * scale, palette,
+              FRAME_DELAY_CS, transparent=False)

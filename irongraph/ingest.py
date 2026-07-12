@@ -82,6 +82,8 @@ def regenerate_all(registry: Registry | None = None) -> dict:
         "activity_current": st.activity_current,
         "activity_longest": st.activity_longest,
         "weekly_current": st.weekly_current,
+        "workouts_this_week": st.workouts_this_week,
+        "weekly_target": st.weekly_target,
         "level": prof.get("level", 1),
         "title": prof.get("title", "Novice"),
         "xp": prof.get("xp", 0),

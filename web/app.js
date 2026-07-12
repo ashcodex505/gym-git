@@ -29,6 +29,11 @@ const REC_LABEL = {
   max_distance: "Distance", best_pace: "Best pace",
 };
 const recLabel = (t) => REC_LABEL[t] || (t.startsWith("rep_weight:") ? `Best @ ${t.split(":")[1]} reps` : t);
+const px = (name, h = 20) =>
+  `<img class="px" style="height:${h}px" src="/generated/sprites/${name}.gif" alt="" onerror="this.remove()">`;
+const hudRow = (filled, total, icon, cap) =>
+  `<div class="hud-row">${Array.from({ length: total }, (_, i) =>
+    px(i < filled ? icon : icon + "-empty")).join("")}<span class="hud-cap">${cap}</span></div>`;
 const h1 = (sprite, text) =>
   `<h1 class="px-h1"><img class="px" src="/generated/sprites/${sprite}.gif" alt="" onerror="this.remove()">${text}</h1>`;
 
@@ -75,6 +80,12 @@ async function renderHome() {
         <div class="hero-armor">${tier} armor${next ? ` — ${esc(next.name)} forged at level ${next.lv}` : " — final form"}</div>
         <div class="hero-bar"><i style="width:${Math.min(100, 100 * xpInLevel / Math.max(xpNeed, 1)).toFixed(0)}%"></i></div>
         <div class="hero-xp">${s.xp} XP · ${s.xp_next - s.xp} to level ${s.level + 1}</div>
+        <div class="hud-rows">
+          ${hudRow(Math.min(st.workouts_this_week, st.weekly_target + 2), Math.max(st.weekly_target, st.workouts_this_week), "heart",
+                   `${st.workouts_this_week}/${st.weekly_target} quests this week`)}
+          ${hudRow(Math.min(5, Math.floor(5 * xpInLevel / Math.max(xpNeed, 1)) + (xpInLevel > 0 ? 1 : 0)), 5, "star",
+                   `level ${s.level} progress`)}
+        </div>
       </div>
     </div>
     <div class="grid cols-3">
@@ -97,7 +108,7 @@ async function renderHome() {
         <div id="home-prs">${s.newest_prs.length ? s.newest_prs.map((p) =>
           `<div class="pr-item"><b>${esc(p.exercise_id.replace(/-/g, " "))}</b>
              <span class="val">${esc(p.display)}</span><span class="badge pr">${p.date}</span></div>`).join("")
-          : '<div class="empty"><span class="big">🏔️</span>No PRs yet — every workout from here is a first ascent.</div>'}</div>
+          : `<div class="empty">${px("slime", 30)}<br>No PRs yet — even this slime believes in you.</div>`}</div>
       </div>
       <div class="card">
         <div class="label">Recommended next</div>
@@ -123,7 +134,7 @@ async function renderTimeline() {
           ${e.notes ? `<span class="m">// ${esc(e.notes)}</span>` : ""}</div>`).join("")}
         ${w.notes ? `<div class="tl-entry m" style="color:var(--muted)">📝 ${esc(w.notes)}</div>` : ""}
       </div>`).join("")
-    : '<div class="empty"><span class="big">📜</span>No history yet. Close tonight\'s quest to write the first entry.</div>');
+    : `<div class="empty">${px("slime", 30)}<br>The quest log is empty. Close tonight's quest to write the first entry.</div>`);
 }
 
 // ---------------------------------------------------------------- vault
@@ -140,7 +151,7 @@ async function renderVault() {
         <td class="mono">${r.history.length > 1
           ? r.history.slice(0, -1).map((h) => esc(h.display)).join(" → ") + " → <b>now</b>"
           : "first record"}</td></tr>`).join("") + "</table>"
-    : '<div class="empty"><span class="big">🏆</span>The vault is empty. It won\'t stay that way.</div>');
+    : `<div class="empty">${px("slime", 30)}<br>The vault is empty. It won't stay that way.</div>`);
 }
 
 // ---------------------------------------------------------------- achievements
@@ -177,7 +188,8 @@ function renderLegend(g) {
   for (const n of g.nodes) counts[n.category] = (counts[n.category] || 0) + 1;
   $("#graph-legend").innerHTML = `<div class="lg-title">Clusters</div>` +
     g.clusters.map((c) => `<div class="lg-row" data-c="${c.id}">
-      <span class="lg-dot" style="background:${CLUSTER_COLORS[c.id] || "#8b949e"}"></span>
+      <img class="lg-gem" src="/generated/sprites/gem-${c.id}.gif" alt=""
+           onerror="this.outerHTML = '<span class=lg-dot style=background:${CLUSTER_COLORS[c.id] || "#8b949e"}></span>'">
       ${c.id} <span style="margin-left:auto;color:var(--muted)">${counts[c.id] || 0}</span></div>`).join("");
   document.querySelectorAll(".lg-row").forEach((el) =>
     el.addEventListener("click", () => {

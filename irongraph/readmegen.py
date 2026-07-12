@@ -119,12 +119,26 @@ def build_readme(*, stats_summary: dict, events: list[WorkoutEvent],
     level = stats_summary.get("level", 1)
     title = stats_summary.get("title", "Novice")
     xp = stats_summary.get("xp", 0)
+    # Terraria-style HUD: hearts = quests this week, mana stars = level progress
+    week = stats_summary.get("workouts_this_week", 0)
+    target = stats_summary.get("weekly_target", 3)
+    hearts = "".join(
+        f'<img src="generated/sprites/{"heart" if i < week else "heart-empty"}.gif" width="20" alt="">'
+        for i in range(max(target, week)))
+    from .gamify import xp_for_level as _xfl
+    floor_xp, next_xp = _xfl(level), _xfl(level + 1)
+    frac = (xp - floor_xp) / max(next_xp - floor_xp, 1)
+    stars = "".join(
+        f'<img src="generated/sprites/{"star" if i < round(frac * 5) else "star-empty"}.gif" width="20" alt="">'
+        for i in range(5))
     parts.append(
         '<div align="center">\n\n'
-        f'<img src="generated/hero-sprite.gif" alt="Level {level} {title} — the IronGraph hero" width="110">\n\n'
-        f"**Level {level} · {title}** — {xp} XP\n\n"
-        "<sub>The hero's armor is forged by training: cloth → leather → steel → gold → ember.\n"
-        "Every workout commit levels him up.</sub>\n\n"
+        f'<img src="generated/scene.gif" alt="The IronGraph hero training at the forge, level {level} {title}" width="410">\n\n'
+        f"**⚔️ Level {level} · {title}** — {xp} XP\n\n"
+        f'{hearts}&nbsp;&nbsp;&nbsp;{stars}\n\n'
+        f"<sub>❤️ quests this week ({week}/{target}) · ✦ progress to level {level + 1}</sub>\n\n"
+        "<sub>The hero's armor is forged by training: cloth → leather → steel → gilded → ember.\n"
+        "Every workout commit is XP. Every PR re-lights the forge.</sub>\n\n"
         "</div>\n"
     )
 

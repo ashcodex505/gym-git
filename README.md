@@ -20,12 +20,16 @@ authored by the person who performed it.
 
 <div align="center">
 
-<img src="generated/hero-sprite.gif" alt="Level 1 Novice — the IronGraph hero" width="110">
+<img src="generated/scene.gif" alt="The IronGraph hero training at the forge, level 1 Novice" width="410">
 
-**Level 1 · Novice** — 0 XP
+**⚔️ Level 1 · Novice** — 0 XP
 
-<sub>The hero's armor is forged by training: cloth → leather → steel → gold → ember.
-Every workout commit levels him up.</sub>
+<img src="generated/sprites/heart-empty.gif" width="20" alt=""><img src="generated/sprites/heart-empty.gif" width="20" alt=""><img src="generated/sprites/heart-empty.gif" width="20" alt="">&nbsp;&nbsp;&nbsp;<img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt="">
+
+<sub>❤️ quests this week (0/3) · ✦ progress to level 2</sub>
+
+<sub>The hero's armor is forged by training: cloth → leather → steel → gilded → ember.
+Every workout commit is XP. Every PR re-lights the forge.</sub>
 
 </div>
 
