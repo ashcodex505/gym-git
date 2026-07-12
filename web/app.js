@@ -1,5 +1,5 @@
 // IronGraph dashboard application.
-import { ExerciseGraph, CLUSTER_COLORS } from "./graph.js";
+import { ExerciseGraph, CLUSTER_COLORS } from "./graph.js?v=3";
 
 const $ = (s) => document.querySelector(s);
 const api = async (path, opts) => {
@@ -200,8 +200,11 @@ function bindGraphHud() {
 
 // ---------------------------------------------------------------- detail panel
 const detailHistory = [];
+let detailSeq = 0;   // guards against a late fetch re-opening a closed panel
 async function openDetail(id, push = true) {
+  const seq = ++detailSeq;
   const d = await api("/exercise/" + id);
+  if (seq !== detailSeq) return;   // closed or superseded while loading
   if (push) detailHistory.push(id);
   const ex = d.exercise, st = d.stats;
   const cur = d.records || {};
@@ -289,6 +292,7 @@ function drawSpark(hist) {
 }
 $("#detail-close").addEventListener("click", closeDetail);
 function closeDetail() {
+  detailSeq++;                     // invalidate any in-flight openDetail
   $("#detail-panel").classList.add("hidden");
   detailHistory.length = 0;
   graph?.clearSelection();
@@ -380,11 +384,18 @@ document.addEventListener("keydown", (e) => {
 });
 
 // ---------------------------------------------------------------- add exercise
-$("#add-ex-btn")?.addEventListener("click", () => {
+const APP_VERSION = 3;
+console.info(`IronGraph dashboard app.js v${APP_VERSION}`);
+
+function openAddModal() {
   $("#add-ex-modal").classList.remove("hidden");
   $("#aem-error").textContent = "";
   $("#add-ex-form").reset();
   $("#add-ex-form [name=name]").focus();
+}
+// Delegated: survives any DOM timing/rerender, works from any view.
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#add-ex-btn")) openAddModal();
 });
 $("#aem-cancel").addEventListener("click", () => $("#add-ex-modal").classList.add("hidden"));
 $("#add-ex-modal").addEventListener("click", (e) => {
