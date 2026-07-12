@@ -41,6 +41,7 @@ EXAMPLES = """\
 | 3 sets of 5 at 185 | `3x5 @ 185 lb` or `185x5, 185x5, 185x5` |
 | bodyweight 8 reps, then +25 lb for 5 | `bw x 8; +25 lb x 5` |
 | treadmill 25 min, 2.3 miles, incline 3 | `25 min, 2.3 mi, incline 3` |
+| incline walk 25 min at speed 3, incline 12 | `25 min, speed 3, incline 12` |
 | stairmaster 30 min level 8 | `30 min level 8` |
 | plank 2 min 15 s | `2m15s` |
 | kg instead of lb | `84 kg x 5` |

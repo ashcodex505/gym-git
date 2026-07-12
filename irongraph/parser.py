@@ -98,7 +98,8 @@ DUR_INLINE = re.compile(
     re.IGNORECASE,
 )
 DIST_INLINE = re.compile(rf"(?P<v>{NUM})\s*(?P<u>mi(?:les?)?|km|k\b|meters?|m\b)", re.IGNORECASE)
-INCLINE_INLINE = re.compile(rf"(?:incline\s*(?P<a>{NUM})\s*%?|(?P<b>{NUM})\s*%\s*incline)", re.IGNORECASE)
+INCLINE_INLINE = re.compile(rf"(?:incline\s*(?:at\s*)?(?P<a>{NUM})\s*%?|(?P<b>{NUM})\s*%\s*incline)", re.IGNORECASE)
+SPEED_INLINE = re.compile(rf"(?:speed\s*(?:at\s*)?(?P<a>{NUM})|(?P<b>{NUM})\s*mph)", re.IGNORECASE)
 LEVEL_INLINE = re.compile(r"(?:level|lvl|resistance)\s*(?P<v>\d+)", re.IGNORECASE)
 CAL_INLINE = re.compile(rf"(?P<v>{NUM})\s*(?:k?cal(?:orie)?s?)\b", re.IGNORECASE)
 RPE_INLINE = re.compile(rf"@?\s*rpe\s*(?P<v>{NUM})", re.IGNORECASE)
@@ -130,6 +131,11 @@ def _parse_cardio(perf: str) -> SetRecord | None:
         if m:
             s.duration_s = int(m.group(1)) * 60 + int(m.group(2))
             txt = txt[: m.start()] + txt[m.end():]
+    # speed BEFORE distance so "3 mph" can never be misread as miles
+    m = SPEED_INLINE.search(txt)
+    if m:
+        s.speed = float(m.group("a") or m.group("b"))
+        txt = txt[: m.start()] + txt[m.end():]
     m = DIST_INLINE.search(txt)
     if m:
         s.distance = float(m.group("v"))
@@ -147,8 +153,14 @@ def _parse_cardio(perf: str) -> SetRecord | None:
     m = CAL_INLINE.search(txt)
     if m:
         s.calories = float(m.group("v"))
-    if s.duration_s is None and s.distance is None and s.level is None:
+    if s.duration_s is None and s.distance is None and s.level is None and s.speed is None:
         return None
+    # speed × duration with no explicit distance => derive it (settings-style
+    # logging: "25 min, incline 12, speed 3" walks 1.25 mi)
+    if s.distance is None and s.speed and s.duration_s:
+        s.distance = round(s.speed * s.duration_s / 3600.0, 2)
+        s.distance_unit = "mi"
+        s.distance_derived = True
     return s
 
 

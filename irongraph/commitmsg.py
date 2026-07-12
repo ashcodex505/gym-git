@@ -84,6 +84,8 @@ def _describe_entry(e: WorkoutEntry) -> str:
                 parts.append(f"{c.distance:g} {c.distance_unit or 'mi'}")
             if c.incline_pct is not None:
                 parts.append(f"incline {c.incline_pct:g}%")
+            if c.speed is not None:
+                parts.append(f"speed {c.speed:g} mph")
             if c.level is not None:
                 parts.append(f"level {c.level}")
             if c.calories is not None:

@@ -86,9 +86,11 @@ class SetRecord:
     distance: float | None = None
     distance_unit: str | None = None     # mi | km | m
     incline_pct: float | None = None
+    speed: float | None = None           # mph (treadmill speed setting)
     level: int | None = None
     calories: float | None = None
     rpe: float | None = None
+    distance_derived: bool = False       # True when computed from speed × time
 
     def to_dict(self) -> dict[str, Any]:
         return {k: v for k, v in self.__dict__.items() if v not in (None, False)}

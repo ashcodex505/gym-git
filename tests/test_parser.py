@@ -101,3 +101,29 @@ def test_alias_resolution(iso_repo):
     assert r.resolve("Push ups").id == "push-up"
     assert r.resolve("RDL").id == "romanian-deadlift"
     assert r.resolve("ohp").id == "overhead-press"
+
+
+def test_incline_speed_walk(iso_repo):
+    p = make_parser(iso_repo)
+    res = p.parse("- [x] Treadmill :: 25 min, speed 3, incline 12")
+    assert res.ok
+    s = res.entries[0].sets[0]
+    assert s.duration_s == 1500 and s.speed == 3.0 and s.incline_pct == 12.0
+    # distance derived from speed × time (3 mph × 25 min = 1.25 mi)
+    assert s.distance == 1.25 and s.distance_unit == "mi" and s.distance_derived
+
+
+def test_mph_not_confused_with_miles(iso_repo):
+    p = make_parser(iso_repo)
+    res = p.parse("- [x] Treadmill :: 30 min 3.5 mph incline 10")
+    assert res.ok
+    s = res.entries[0].sets[0]
+    assert s.speed == 3.5 and s.incline_pct == 10.0
+    assert s.distance == 1.75  # derived, not parsed as miles
+
+
+def test_explicit_distance_wins_over_derivation(iso_repo):
+    p = make_parser(iso_repo)
+    res = p.parse("- [x] Treadmill :: 25 min, 2.3 mi, speed 5.5, incline 3")
+    s = res.entries[0].sets[0]
+    assert s.distance == 2.3 and s.speed == 5.5 and not s.distance_derived
