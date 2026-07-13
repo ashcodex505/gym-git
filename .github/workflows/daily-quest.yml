@@ -8,7 +8,13 @@ name: Daily Quest
 
 on:
   schedule:
-    - cron: "7 4 * * *"   # 04:07 UTC == 21:07 America/Phoenix
+    # Primary + two fallbacks: GitHub's cron scheduler can skip or delay
+    # runs (especially a workflow's first ever occurrence, and under
+    # load). The dedupe step makes retries free — at most ONE quest issue
+    # per day is ever created — so extra slots only add reliability.
+    - cron: "7 4 * * *"    # 21:07 America/Phoenix (primary)
+    - cron: "37 4 * * *"   # 21:37 fallback
+    - cron: "7 5 * * *"    # 22:07 last-chance fallback
   workflow_dispatch: {}
 
 permissions:
@@ -39,8 +45,10 @@ jobs:
         run: |
           TODAY=$(TZ=America/Phoenix date +%Y-%m-%d)
           echo "today=$TODAY" >> "$GITHUB_OUTPUT"
+          # search ALL states: a quest closed early tonight still counts as
+          # today's quest (fallback crons must not resurrect it)
           EXISTING=$(gh issue list --repo "$GITHUB_REPOSITORY" --label daily-quest \
-            --state open --search "in:body irongraph:quest date=$TODAY" --json number --jq length)
+            --state all --search "in:body irongraph:quest date=$TODAY" --json number --jq length)
           echo "exists=$EXISTING" >> "$GITHUB_OUTPUT"
 
       - name: Create quest issue
