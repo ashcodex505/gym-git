@@ -18,11 +18,11 @@ git_author:
 
 # --- Scheduling --------------------------------------------------------------
 # America/Phoenix does not observe DST: local time is always UTC-7.
-# 21:07 local == 04:07 UTC next day. Off-the-hour minute chosen deliberately:
-# GitHub Actions cron queues are least congested away from :00.
+# 21:00 local == 04:00 UTC next day; off-hour fallback slots at :13/:43
+# cover GitHub's congested on-the-hour cron queue.
 timezone: "America/Phoenix"
 quest_hour_local: 21
-quest_minute_local: 7
+quest_minute_local: 0
 
 # --- Units -------------------------------------------------------------------
 default_weight_unit: lb        # lb | kg

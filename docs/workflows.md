@@ -2,11 +2,12 @@
 
 ## daily-quest.yml — the nightly quest
 
-- **Schedule**: `cron: "7 4 * * *"` = 04:07 UTC = **21:07
+- **Schedule**: `cron: "0 4 * * *"` = 04:00 UTC = **21:00
   America/Phoenix** every day of the year (Arizona doesn't observe DST,
-  so one UTC line is exact). The `:07` minute is deliberate: GitHub's
-  cron queue is congested on the hour and off-hour schedules fire more
-  reliably. `workflow_dispatch` allows manual runs.
+  so the UTC lines are exact). Because GitHub's cron queue is most
+  congested on the hour and can skip/delay events, two off-hour
+  fallbacks (21:13, 21:43) re-fire the job; the dedupe step keeps it to
+  one quest per day. `workflow_dispatch` allows manual runs.
 - **Permissions**: `issues: write`, `contents: read` — least privilege.
 - **Dedupe**: searches for an open `daily-quest` issue containing
   today's `irongraph:quest date=YYYY-MM-DD` marker before creating one,

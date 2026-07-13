@@ -1,9 +1,9 @@
 # Creates the nightly workout quest issue.
 #
-# 21:07 America/Phoenix — Arizona never observes DST, so local time is a
-# constant UTC-7 and one cron entry is exact year-round. :07 (not :00)
-# because GitHub's cron queue is congested on the hour and events can be
-# delayed or dropped; off-hour schedules fire far more reliably.
+# 21:00 America/Phoenix — Arizona never observes DST, so local time is a
+# constant UTC-7 and these cron entries are exact year-round. On-the-hour
+# slots are GitHub's most congested, so two off-hour fallbacks follow
+# closely; dedupe guarantees only one quest per day either way.
 name: Daily Quest
 
 on:
@@ -12,9 +12,9 @@ on:
     # runs (especially a workflow's first ever occurrence, and under
     # load). The dedupe step makes retries free — at most ONE quest issue
     # per day is ever created — so extra slots only add reliability.
-    - cron: "7 4 * * *"    # 21:07 America/Phoenix (primary)
-    - cron: "37 4 * * *"   # 21:37 fallback
-    - cron: "7 5 * * *"    # 22:07 last-chance fallback
+    - cron: "0 4 * * *"    # 21:00 America/Phoenix (primary)
+    - cron: "13 4 * * *"   # 21:13 fallback (off-hour = more reliable)
+    - cron: "43 4 * * *"   # 21:43 last-chance fallback
   workflow_dispatch: {}
 
 permissions:
