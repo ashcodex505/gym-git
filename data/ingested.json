@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "issues": {
+    "issue-1": {
+      "date": "2026-07-12",
+      "ingested_at": "2026-07-12T22:48:01-07:00",
+      "entries": 2,
+      "prs": 7
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "issue-1",
+  "date": "2026-07-12",
+  "logged_at": "2026-07-12T22:48:01-07:00",
+  "source": {
+    "type": "github-issue",
+    "issue_number": 1,
+    "issue_url": "https://github.com/ashcodex505/gym-git/issues/1"
+  },
+  "entries": [
+    {
+      "exercise_id": "treadmill",
+      "exercise_name": "Incline Treadmill",
+      "modality": "distance_time",
+      "sets": [
+        {
+          "duration_s": 1800,
+          "distance": 1.5,
+          "distance_unit": "mi",
+          "incline_pct": 12.0,
+          "speed": 3.0,
+          "distance_derived": true
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "landmine-press",
+      "exercise_name": "Landmine Press",
+      "modality": "weight_reps",
+      "sets": [
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "reps": 10
+        }
+      ],
+      "raw": ""
+    }
+  ]
+}

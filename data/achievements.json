@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "unlocked": [
+    {
+      "id": "first-commit",
+      "name": "First Commit",
+      "emoji": "\ud83c\udfc1",
+      "description": "Complete your first recorded workout.",
+      "date": "2026-07-12",
+      "workout_id": "issue-1"
+    },
+    {
+      "id": "first-pr",
+      "name": "Breaking Ground",
+      "emoji": "\ud83d\udcc8",
+      "description": "Set your first personal record.",
+      "date": "2026-07-12",
+      "workout_id": "issue-1"
+    }
+  ]
+}

@@ -17,6 +17,25 @@
       "custom": true,
       "instructions": "",
       "relations": {}
+    },
+    {
+      "id": "landmine-press",
+      "name": "Landmine Press",
+      "aliases": [],
+      "category": "shoulders",
+      "primary_muscles": [
+        "shoulders"
+      ],
+      "secondary_muscles": [],
+      "movement_pattern": "other",
+      "equipment": "barbell",
+      "modality": "weight_reps",
+      "compound": false,
+      "supports_added_weight": false,
+      "supports_level": false,
+      "custom": true,
+      "instructions": "",
+      "relations": {}
     }
   ],
   "overrides": {
