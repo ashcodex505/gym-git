@@ -15,6 +15,12 @@ name: Process Workout
 on:
   issues:
     types: [closed, labeled]
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "Quest issue number to (re)process"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -27,9 +33,10 @@ concurrency:
 jobs:
   ingest:
     if: |
-      contains(github.event.issue.labels.*.name, 'daily-quest') &&
-      (github.event.action == 'closed' ||
-       (github.event.action == 'labeled' && github.event.label.name == 'log-workout'))
+      github.event_name == 'workflow_dispatch' ||
+      (contains(github.event.issue.labels.*.name, 'daily-quest') &&
+       (github.event.action == 'closed' ||
+        (github.event.action == 'labeled' && github.event.label.name == 'log-workout')))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,10 +50,33 @@ jobs:
       - name: Install IronGraph
         run: pip install -q pyyaml
 
-      - name: Write issue body to file (never through a shell)
+      # The body always comes from the API (not the event payload): it's
+      # identical for event runs and it's the only source for manual runs —
+      # plus it picks up edits made after the triggering event. It is
+      # written straight to a file and parsed in Python; never near a shell.
+      - name: Resolve issue and fetch body
+        id: issue
         env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
-        run: printf '%s' "$ISSUE_BODY" > /tmp/issue_body.md
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          N="${{ github.event_name == 'workflow_dispatch' && inputs.issue_number || github.event.issue.number }}"
+          gh api "repos/${{ github.repository }}/issues/$N" > /tmp/issue.json
+          python - <<'PY'
+          import json, os
+          d = json.load(open("/tmp/issue.json"))
+          open("/tmp/issue_body.md", "w").write(d.get("body") or "")
+          labels = [lb["name"] for lb in d["labels"]]
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"number={d['number']}\n")
+              f.write(f"url={d['html_url']}\n")
+              f.write(f"is_quest={'true' if 'daily-quest' in labels else 'false'}\n")
+          PY
+
+      - name: Guard non-quest issues (manual runs)
+        if: steps.issue.outputs.is_quest != 'true'
+        run: |
+          echo "::error::Issue #${{ steps.issue.outputs.number }} has no daily-quest label — refusing to ingest an arbitrary issue."
+          exit 1
 
       - name: Extract quest date from issue body
         id: qdate
@@ -60,9 +90,9 @@ jobs:
         continue-on-error: true
         run: |
           python -m irongraph.ingest \
-            --issue-number "${{ github.event.issue.number }}" \
+            --issue-number "${{ steps.issue.outputs.number }}" \
             --issue-body-file /tmp/issue_body.md \
-            --issue-url "${{ github.event.issue.html_url }}" \
+            --issue-url "${{ steps.issue.outputs.url }}" \
             --date "${{ steps.qdate.outputs.date }}" \
             --summary-file /tmp/summary.json
           echo "code=$?" >> "$GITHUB_OUTPUT"
@@ -110,8 +140,8 @@ jobs:
               lines += ["", f"🆕 Added custom exercise(s): {', '.join(s['new_custom_exercises'])}"]
           open("/tmp/comment.md", "w").write("\n".join(lines))
           PY
-          gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/comment.md
-          gh issue edit "${{ github.event.issue.number }}" --remove-label awaiting-log,needs-fix 2>/dev/null || true
+          gh issue comment "${{ steps.issue.outputs.number }}" --body-file /tmp/comment.md
+          gh issue edit "${{ steps.issue.outputs.number }}" --remove-label awaiting-log,needs-fix 2>/dev/null || true
 
       - name: Comment validation problems and reopen
         if: steps.result.outputs.status == 'invalid'
@@ -129,9 +159,9 @@ jobs:
                     "re-apply the `log-workout` label to retry."]
           open("/tmp/comment.md", "w").write("\n".join(lines))
           PY
-          gh issue comment "${{ github.event.issue.number }}" --body-file /tmp/comment.md
-          gh issue reopen "${{ github.event.issue.number }}" 2>/dev/null || true
-          gh issue edit "${{ github.event.issue.number }}" --add-label needs-fix 2>/dev/null || true
+          gh issue comment "${{ steps.issue.outputs.number }}" --body-file /tmp/comment.md
+          gh issue reopen "${{ steps.issue.outputs.number }}" 2>/dev/null || true
+          gh issue edit "${{ steps.issue.outputs.number }}" --add-label needs-fix 2>/dev/null || true
 
       - name: Fail loudly on unexpected error
         if: steps.result.outputs.status == 'error'
@@ -144,5 +174,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue comment "${{ github.event.issue.number }}" \
+          gh issue comment "${{ steps.issue.outputs.number }}" \
             --body "💤 This quest was already recorded — duplicate processing skipped (idempotent by issue number)."
