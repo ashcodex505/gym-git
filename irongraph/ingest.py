@@ -174,6 +174,10 @@ def ingest_issue(issue_number: int, issue_body: str, *, date: str | None = None,
     registry = Registry.load()
     parser = QuestParser(registry, default_unit=cfg.default_weight_unit)
     result = parser.parse(issue_body)
+    if not result.entries and len(result.problems) == 1 and result.problems[0].line == "":
+        # nothing loggable anywhere: a rest-day close, not an error
+        return {"status": "empty",
+                "message": "No workout lines found — treated as a rest day. 🌙"}
     if result.problems:
         return {"status": "invalid",
                 "problems": [p.reason for p in result.problems],
@@ -274,6 +278,7 @@ def main() -> None:
     ap.add_argument("--issue-url", default="")
     ap.add_argument("--date")
     ap.add_argument("--summary-file", help="write the result summary JSON here")
+    ap.add_argument("--comments-file", help="owner-authored issue comments, concatenated; parsed after the body")
     ap.add_argument("--regen", action="store_true", help="only regenerate derived views")
     args = ap.parse_args()
 
@@ -285,6 +290,13 @@ def main() -> None:
     if args.issue_number is None or not args.issue_body_file:
         ap.error("--issue-number and --issue-body-file are required (or use --regen)")
     body = open(args.issue_body_file, encoding="utf-8").read()
+    if args.comments_file:
+        try:
+            comments = open(args.comments_file, encoding="utf-8").read().strip()
+        except OSError:
+            comments = ""
+        if comments:
+            body = body + "\n\n" + comments
     summary = ingest_issue(args.issue_number, body, date=args.date, issue_url=args.issue_url)
     out = json.dumps(summary, indent=2)
     print(out)
@@ -292,6 +304,8 @@ def main() -> None:
         open(args.summary_file, "w").write(out)
     if summary["status"] == "invalid":
         sys.exit(2)
+    if summary["status"] == "empty":
+        sys.exit(0)
     if summary["status"] == "duplicate":
         sys.exit(3)
 

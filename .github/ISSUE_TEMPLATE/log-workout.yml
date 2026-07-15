@@ -1,0 +1,59 @@
+# Issue FORM (not a markdown template): gives real text fields in the
+# GitHub UI — web and mobile — so a workout can be logged without editing
+# any markdown. Submitting applies the labels below, which triggers
+# process-workout.yml immediately (no need to close anything).
+name: 🏋️ Log a workout
+description: Log today's training with plain text fields — no markdown editing needed.
+title: "🏋️ Workout Log"
+labels: ["daily-quest", "log-workout"]
+assignees: ["ashcodex505"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One exercise per line, written as **`Exercise: numbers`**. Leave any section empty.
+        Sets are comma-separated; `185x6x3` means 3 sets of 185×6; `// text` adds a note to that exercise.
+
+  - type: textarea
+    id: strength
+    attributes:
+      label: 🏋️ Strength
+      description: "weights & reps"
+      placeholder: |
+        Barbell Bench Press: 185 lb x 6, 185 x 5
+        Lat Pulldown: 160 x 8 x 3
+        Pull-ups: bw x 8; +25 lb x 5
+    validations:
+      required: false
+
+  - type: textarea
+    id: cardio
+    attributes:
+      label: 🏃 Cardio
+      description: "duration / distance / speed / incline / level"
+      placeholder: |
+        Treadmill: 30 min, speed 3, incline 12
+        StairMaster: 25 min level 8
+        Outdoor Run: 28 min, 3.1 mi
+    validations:
+      required: false
+
+  - type: textarea
+    id: core
+    attributes:
+      label: 🧱 Core & bodyweight
+      description: "weighted, reps-only, or timed"
+      placeholder: |
+        Cable Crunch: 110 lb x 15 x 3
+        Hanging Leg Raise: 15 x 3
+        Plank: 2m 15s
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Session notes
+      description: "how it felt, anything worth remembering (optional)"
+    validations:
+      required: false
