@@ -45,3 +45,17 @@ def test_filled_form_line_parses(iso_repo):
     assert len(res.entries) == 1
     assert res.entries[0].exercise_id == "barbell-bench-press"
     assert len(res.entries[0].sets) == 2
+
+
+def test_form_passes_githubs_official_schema(iso_repo, tmp_path):
+    """Validate against GitHub's issue-forms JSON schema (vendored from
+    SchemaStore). A schema-invalid form makes GitHub silently fall back
+    to a blank issue — this guards the whole logging UX."""
+    import json
+    from pathlib import Path
+
+    import jsonschema
+
+    schema = json.loads((Path(__file__).parent / "data" / "github-issue-forms.schema.json").read_text())
+    out = write_form(out=tmp_path / "log-workout.yml")
+    jsonschema.validate(yaml.safe_load(out.read_text()), schema)

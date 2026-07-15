@@ -1,0 +1,7 @@
+# If a form template ever fails to load, GitHub falls back here instead of
+# a blank composer — keeping the chooser as the worst case.
+blank_issues_enabled: false
+contact_links:
+  - name: 🖥️ IronGraph dashboard (localhost)
+    url: https://github.com/ashcodex505/gym-git#-the-dashboard
+    about: Explore the exercise graph, PR vault, and AI coach locally.
