@@ -1,0 +1,7 @@
+name: T1 minimal
+description: t1 marker
+body:
+  - type: textarea
+    id: box1
+    attributes:
+      label: Box one

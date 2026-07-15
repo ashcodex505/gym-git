@@ -1,0 +1,8 @@
+name: 🏋️ T2 emoji
+description: t2 marker — em dash · dots
+title: 🏋️ Workout Log
+body:
+  - type: textarea
+    id: box1
+    attributes:
+      label: 🏋️ Box one
