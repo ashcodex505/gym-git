@@ -46,8 +46,10 @@ def _lines(reg: Registry, categories: list[str]) -> str:
 
 def build_form(reg: Registry) -> dict:
     def textarea(fid: str, label: str, desc: str, value: str) -> dict:
-        return {"type": "textarea", "id": fid,
-                "attributes": {"label": label, "description": desc, "value": value},
+        attrs = {"label": label, "description": desc}
+        if value:  # GitHub rejects forms containing empty attribute strings
+            attrs["value"] = value
+        return {"type": "textarea", "id": fid, "attributes": attrs,
                 "validations": {"required": False}}
 
     return {

@@ -117,6 +117,5 @@ body:
   attributes:
     label: Session notes
     description: optional — how it felt
-    value: ''
   validations:
     required: false
