@@ -138,6 +138,10 @@ def regenerate_all(registry: Registry | None = None) -> dict:
     from .sprites import generate_all
     generate_all(prof.get("level", 1), paths.generated_dir())
 
+    # ---- log form stays in sync with the registry --------------------------
+    from .formgen import write_form
+    write_form(registry)
+
     featured_charts = []
     for ex_id, stx in ex_stats.items():
         exd = registry.by_id.get(ex_id)
