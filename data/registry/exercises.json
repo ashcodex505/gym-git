@@ -104,7 +104,7 @@
     {"id": "russian-twist", "name": "Russian Twist", "aliases": [], "category": "core", "primary_muscles": ["obliques"], "secondary_muscles": ["abs"], "movement_pattern": "rotation", "equipment": "bodyweight", "modality": "weight_reps", "compound": false,
      "relations": {"variation_of": [], "similar_to": [], "progresses_to": [], "regresses_to": [], "complementary_to": ["plank"], "alternative_to": []}},
 
-    {"id": "treadmill", "name": "Treadmill", "aliases": ["treadmill run", "treadmill walk"], "category": "cardio", "primary_muscles": ["legs", "cardiovascular"], "secondary_muscles": [], "movement_pattern": "gait", "equipment": "machine", "modality": "distance_time", "compound": true,
+    {"id": "treadmill", "name": "Treadmill", "aliases": ["treadmill run", "treadmill walk", "incline treadmill", "incline walk"], "category": "cardio", "primary_muscles": ["legs", "cardiovascular"], "secondary_muscles": [], "movement_pattern": "gait", "equipment": "machine", "modality": "distance_time", "compound": true,
      "relations": {"variation_of": [], "similar_to": ["outdoor-run", "walking"], "progresses_to": ["outdoor-run"], "regresses_to": ["walking"], "complementary_to": [], "alternative_to": ["outdoor-run", "elliptical"]}},
     {"id": "outdoor-run", "name": "Outdoor Run", "aliases": ["run", "running", "jog", "jogging"], "category": "cardio", "primary_muscles": ["legs", "cardiovascular"], "secondary_muscles": [], "movement_pattern": "gait", "equipment": "none", "modality": "distance_time", "compound": true,
      "relations": {"variation_of": [], "similar_to": ["treadmill"], "progresses_to": [], "regresses_to": ["walking"], "complementary_to": [], "alternative_to": ["treadmill"]}},

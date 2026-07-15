@@ -127,3 +127,29 @@ def test_explicit_distance_wins_over_derivation(iso_repo):
     res = p.parse("- [x] Treadmill :: 25 min, 2.3 mi, speed 5.5, incline 3")
     s = res.entries[0].sets[0]
     assert s.distance == 2.3 and s.speed == 5.5 and not s.distance_derived
+
+
+def test_code_fences_are_never_parsed(iso_repo):
+    """Syntax examples inside ``` fences must not become workout entries
+    (the phantom 'Landmine Press' bug from the first real quest)."""
+    p = make_parser(iso_repo)
+    res = p.parse("""### How to log
+```
+- [x] Landmine Press [muscle: shoulders] :: 70 lb x 10
+Barbell Bench Press: 999 lb x 1
+```
+- [x] Treadmill :: 30 min, speed 3, incline 12
+""")
+    assert res.ok
+    assert [e.exercise_id for e in res.entries] == ["treadmill"]
+
+
+def test_full_quest_template_parses_to_zero_entries(iso_repo):
+    """The untouched quest issue template must contain NOTHING loggable."""
+    from datetime import date
+
+    from irongraph.quest import build_quest
+    p = make_parser(iso_repo)
+    _title, body = build_quest(date(2026, 7, 12))
+    res = p.parse(body)
+    assert res.entries == []

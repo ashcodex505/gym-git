@@ -1,32 +1,32 @@
 {
   "schema_version": 1,
-  "xp": 645,
+  "xp": 310,
   "level": 2,
   "title": "Novice",
   "totals": {
     "workouts": 1,
-    "prs": 7,
-    "exercises_tried": 2
+    "prs": 3,
+    "exercises_tried": 1
   },
   "xp_log": [
     {
       "workout_id": "issue-1",
       "grants": {
         "workout": 50,
-        "exercises": 20,
-        "prs": 525,
-        "new_exercises": 50,
+        "exercises": 10,
+        "prs": 225,
+        "new_exercises": 25,
         "streak": 0
       },
-      "total": 645
+      "total": 310
     }
   ],
   "streaks": {
-    "activity_current": 1,
+    "activity_current": 0,
     "activity_longest": 1,
     "weekly_current": 0,
     "weekly_longest": 0,
-    "workouts_this_week": 1,
+    "workouts_this_week": 0,
     "weekly_target": 3
   }
 }

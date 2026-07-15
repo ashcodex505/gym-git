@@ -264,24 +264,63 @@ class QuestParser:
         self.registry = registry
         self.default_unit = default_unit
 
+    # markdown constructs that can never be a plain exercise line
+    _PLAIN_SKIP = ("#", "|", ">", "`", "-", "*", "<", "!", "[", "_", "~")
+
     def parse(self, body: str) -> ParseResult:
         res = ParseResult()
         body = body.replace("\r\n", "\n")
         res.session_notes = self._extract_session_notes(body)
+        in_fence = False
         for line in body.split("\n"):
-            m = CHECKBOX_RE.match(line)
-            if not m or m.group("mark") == " ":
+            # fenced code blocks are documentation (syntax examples), never
+            # loggable lines — the 2026-07-12 phantom "Landmine Press" bug
+            if line.lstrip().startswith("```"):
+                in_fence = not in_fence
                 continue
-            self._parse_line(m.group("rest"), res)
+            if in_fence:
+                continue
+            m = CHECKBOX_RE.match(line)
+            if m:
+                if m.group("mark") == " ":
+                    continue
+                self._parse_line(m.group("rest"), res)
+                continue
+            self._try_plain_line(line, res)
         if not res.entries and not res.problems:
-            res.problems.append(ParseProblem("", "no exercises were checked — check `[x]` at least one exercise and add your numbers after `::`"))
+            res.problems.append(ParseProblem("", "no exercises found — check `[x]` boxes (quest issue) or write `Exercise: numbers` lines (log form)"))
         return res
+
+    def _try_plain_line(self, line: str, res: ParseResult) -> None:
+        """Issue-form logging: bare `Exercise: numbers` lines (no checkbox).
+        Only names already in the registry are accepted, so template prose,
+        placeholders and section text can never be misparsed into workouts."""
+        line = line.strip()
+        if not line or line.startswith(self._PLAIN_SKIP):
+            return
+        rest = line
+        note = None
+        if "//" in rest:
+            rest, note = rest.split("//", 1)
+        name, perf = _split_name_perf(rest.strip())
+        if not perf:
+            return
+        ex = self.registry.resolve(_clamp(name, MAX_NAME_LEN))
+        if ex is None:
+            return
+        self._parse_line(rest.strip() + (f" // {note.strip()}" if note else ""), res)
 
     def _extract_session_notes(self, body: str) -> str | None:
         m = re.search(r"### .*Session notes.*?```(?:text)?\n(.*?)```", body, re.DOTALL | re.IGNORECASE)
         if m:
             notes = m.group(1).strip()
             if notes and not notes.lower().startswith("(optional"):
+                return _clamp(notes, 1000)
+        # issue-form style: "### Session notes" followed by plain text
+        m = re.search(r"###[^\n]*Session notes[^\n]*\n+(.*?)(?=\n###|\Z)", body, re.DOTALL | re.IGNORECASE)
+        if m:
+            notes = m.group(1).strip()
+            if notes and notes != "_No response_":
                 return _clamp(notes, 1000)
         return None
 
