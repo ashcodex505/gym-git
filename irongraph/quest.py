@@ -121,7 +121,7 @@ def build_quest(today: date | None = None) -> tuple[str, str]:
         f"### [🏋️ &nbsp;Strength]({_form_link(repo, 'strength', st_names)}) &nbsp;·&nbsp; "
         f"[🏃 &nbsp;Cardio]({_form_link(repo, 'cardio', ca_names)}) &nbsp;·&nbsp; "
         f"[🧱 &nbsp;Core]({_form_link(repo, 'core', co_names)}) &nbsp;·&nbsp; "
-        f"[📜 &nbsp;Blank form](https://github.com/{repo}/issues/new?template=log-workout.yml)",
+        f"[📋 &nbsp;Full list](https://github.com/{repo}/issues/new?template=log-workout.yml)",
         "",
         "**💬 Or comment right here, then close the issue:**",
         "",
