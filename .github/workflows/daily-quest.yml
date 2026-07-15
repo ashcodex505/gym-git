@@ -45,10 +45,13 @@ jobs:
         run: |
           TODAY=$(TZ=America/Phoenix date +%Y-%m-%d)
           echo "today=$TODAY" >> "$GITHUB_OUTPUT"
-          # search ALL states: a quest closed early tonight still counts as
-          # today's quest (fallback crons must not resurrect it)
-          EXISTING=$(gh issue list --repo "$GITHUB_REPOSITORY" --label daily-quest \
-            --state all --search "in:body irongraph:quest date=$TODAY" --json number --jq length)
+          # Check ALL states: a quest closed early tonight still counts as
+          # today's quest (fallback crons must not resurrect it).
+          # NOTE: this is an exact substring test via jq — GitHub's fuzzy
+          # issue search tokenizes the query and once matched an unrelated
+          # "15" (from `2m15s` in a cheatsheet), silently skipping creation.
+          EXISTING=$(gh api "repos/$GITHUB_REPOSITORY/issues?labels=daily-quest&state=all&per_page=50" \
+            --jq "[.[] | select((.body // \"\") | contains(\"irongraph:quest date=$TODAY\"))] | length")
           echo "exists=$EXISTING" >> "$GITHUB_OUTPUT"
 
       - name: Create quest issue
