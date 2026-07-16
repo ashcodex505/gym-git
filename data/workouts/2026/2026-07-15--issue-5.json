@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "id": "issue-5",
+  "date": "2026-07-15",
+  "logged_at": "2026-07-15T21:53:53-07:00",
+  "source": {
+    "type": "github-issue",
+    "issue_number": 5,
+    "issue_url": "https://github.com/ashcodex505/gym-git/issues/5"
+  },
+  "entries": [
+    {
+      "exercise_id": "dips",
+      "exercise_name": "Dips",
+      "modality": "reps",
+      "sets": [
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "added_weight": true,
+          "reps": 3
+        },
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "added_weight": true,
+          "reps": 3
+        },
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "added_weight": true,
+          "reps": 3
+        },
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "added_weight": true,
+          "reps": 3
+        },
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "added_weight": true,
+          "reps": 3
+        },
+        {
+          "weight": 70.0,
+          "unit": "lb",
+          "added_weight": true,
+          "reps": 3
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "lateral-raise",
+      "exercise_name": "Lateral Raise",
+      "modality": "weight_reps",
+      "sets": [
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 4
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "dumbbell-curl",
+      "exercise_name": "Dumbbell Curl",
+      "modality": "weight_reps",
+      "sets": [
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 3
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 3
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 3
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 3
+        },
+        {
+          "weight": 35.0,
+          "unit": "lb",
+          "reps": 3
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "preacher-curl",
+      "exercise_name": "Preacher Curl",
+      "modality": "weight_reps",
+      "sets": [
+        {
+          "weight": 80.0,
+          "unit": "lb",
+          "reps": 2
+        },
+        {
+          "weight": 80.0,
+          "unit": "lb",
+          "reps": 2
+        },
+        {
+          "weight": 80.0,
+          "unit": "lb",
+          "reps": 2
+        },
+        {
+          "weight": 80.0,
+          "unit": "lb",
+          "reps": 2
+        },
+        {
+          "weight": 80.0,
+          "unit": "lb",
+          "reps": 2
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "tricep-pushdown",
+      "exercise_name": "Tricep Pushdown",
+      "modality": "weight_reps",
+      "sets": [
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        },
+        {
+          "weight": 60.0,
+          "unit": "lb",
+          "reps": 7
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "treadmill",
+      "exercise_name": "Incline Treadmill",
+      "modality": "distance_time",
+      "sets": [
+        {
+          "duration_s": 1800
+        }
+      ],
+      "raw": ""
+    },
+    {
+      "exercise_id": "decline-ab-crunches",
+      "exercise_name": "Decline Ab Crunches",
+      "modality": "weight_reps",
+      "sets": [
+        {
+          "weight": 25.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 25.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 25.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 25.0,
+          "unit": "lb",
+          "reps": 4
+        },
+        {
+          "weight": 25.0,
+          "unit": "lb",
+          "reps": 4
+        }
+      ],
+      "raw": ""
+    }
+  ]
+}

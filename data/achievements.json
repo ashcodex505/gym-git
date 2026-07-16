@@ -16,6 +16,14 @@
       "description": "Set your first personal record.",
       "date": "2026-07-12",
       "workout_id": "issue-1"
+    },
+    {
+      "id": "pr-machine",
+      "name": "PR Machine",
+      "emoji": "\ud83c\udfc6",
+      "description": "Set 10 personal records.",
+      "date": "2026-07-15",
+      "workout_id": "issue-5"
     }
   ]
 }

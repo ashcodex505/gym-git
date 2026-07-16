@@ -20,13 +20,13 @@ authored by the person who performed it.
 
 <div align="center">
 
-<img src="generated/scene.gif" alt="The IronGraph hero training at the forge, level 2 Novice" width="410">
+<img src="generated/scene.gif" alt="The IronGraph hero training at the forge, level 4 Initiate" width="410">
 
-**⚔️ Level 2 · Novice** — 310 XP
+**⚔️ Level 4 · Initiate** — 2155 XP
 
-<img src="generated/sprites/heart-empty.gif" width="20" alt=""><img src="generated/sprites/heart-empty.gif" width="20" alt=""><img src="generated/sprites/heart-empty.gif" width="20" alt="">&nbsp;&nbsp;&nbsp;<img src="generated/sprites/star.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt="">
+<img src="generated/sprites/heart.gif" width="20" alt=""><img src="generated/sprites/heart-empty.gif" width="20" alt=""><img src="generated/sprites/heart-empty.gif" width="20" alt="">&nbsp;&nbsp;&nbsp;<img src="generated/sprites/star.gif" width="20" alt=""><img src="generated/sprites/star.gif" width="20" alt=""><img src="generated/sprites/star.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt=""><img src="generated/sprites/star-empty.gif" width="20" alt="">
 
-<sub>❤️ quests this week (0/3) · ✦ progress to level 3</sub>
+<sub>❤️ quests this week (1/3) · ✦ progress to level 5</sub>
 
 <sub>The hero's armor is forged by training: cloth → leather → steel → gilded → ember.
 Every workout commit is XP. Every PR re-lights the forge.</sub>
@@ -51,7 +51,12 @@ Every record below was once impossible.
 
 | Date | Session | Highlights |
 |---|---|---|
+| 2026-07-15 | chest + shoulders + biceps | Dips 70 lb × 3, Lateral Raise 35 lb × 4, Dumbbell Curl 35 lb × 3 +4 more |
 | 2026-07-12 | cardio | Incline Treadmill 1.5 mi |
+
+## <img src="generated/sprites/sword.gif" width="22" alt=""> Strength Progression
+
+<img src="generated/exercises/treadmill.svg" alt="treadmill progression" width="860">
 
 ## 🫀 Attribute Distribution
 
@@ -107,4 +112,4 @@ Training data is personal history, not medical advice.</sub>
 </div>
 
 
-<sub>README generated 2026-07-15 from 1 recorded workouts. Data lives in <code>data/</code>; every number is recomputable.</sub>
+<sub>README generated 2026-07-16 from 2 recorded workouts. Data lives in <code>data/</code>; every number is recomputable.</sub>

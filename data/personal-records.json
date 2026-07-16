@@ -1,5 +1,151 @@
 {
   "exercises": {
+    "decline-ab-crunches": {
+      "max_e1rm": [
+        {
+          "date": "2026-07-15",
+          "display": "~28 lb e1RM (25 lb \u00d7 4)",
+          "value": 28.3,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_volume": [
+        {
+          "date": "2026-07-15",
+          "display": "500 lb session volume",
+          "value": 500.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_weight": [
+        {
+          "date": "2026-07-15",
+          "display": "25 lb \u00d7 4",
+          "value": 25.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "rep_weight:4": [
+        {
+          "date": "2026-07-15",
+          "display": "25 lb \u00d7 4",
+          "value": 25.0,
+          "workout_id": "issue-5"
+        }
+      ]
+    },
+    "dips": {
+      "max_added": [
+        {
+          "date": "2026-07-15",
+          "display": "+70 lb \u00d7 3",
+          "value": 70.0,
+          "workout_id": "issue-5"
+        }
+      ]
+    },
+    "dumbbell-curl": {
+      "max_e1rm": [
+        {
+          "date": "2026-07-15",
+          "display": "~38 lb e1RM (35 lb \u00d7 3)",
+          "value": 38.5,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_volume": [
+        {
+          "date": "2026-07-15",
+          "display": "525 lb session volume",
+          "value": 525.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_weight": [
+        {
+          "date": "2026-07-15",
+          "display": "35 lb \u00d7 3",
+          "value": 35.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "rep_weight:3": [
+        {
+          "date": "2026-07-15",
+          "display": "35 lb \u00d7 3",
+          "value": 35.0,
+          "workout_id": "issue-5"
+        }
+      ]
+    },
+    "lateral-raise": {
+      "max_e1rm": [
+        {
+          "date": "2026-07-15",
+          "display": "~40 lb e1RM (35 lb \u00d7 4)",
+          "value": 39.7,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_volume": [
+        {
+          "date": "2026-07-15",
+          "display": "560 lb session volume",
+          "value": 560.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_weight": [
+        {
+          "date": "2026-07-15",
+          "display": "35 lb \u00d7 4",
+          "value": 35.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "rep_weight:4": [
+        {
+          "date": "2026-07-15",
+          "display": "35 lb \u00d7 4",
+          "value": 35.0,
+          "workout_id": "issue-5"
+        }
+      ]
+    },
+    "preacher-curl": {
+      "max_e1rm": [
+        {
+          "date": "2026-07-15",
+          "display": "~85 lb e1RM (80 lb \u00d7 2)",
+          "value": 85.3,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_volume": [
+        {
+          "date": "2026-07-15",
+          "display": "800 lb session volume",
+          "value": 800.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_weight": [
+        {
+          "date": "2026-07-15",
+          "display": "80 lb \u00d7 2",
+          "value": 80.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "rep_weight:2": [
+        {
+          "date": "2026-07-15",
+          "display": "80 lb \u00d7 2",
+          "value": 80.0,
+          "workout_id": "issue-5"
+        }
+      ]
+    },
     "treadmill": {
       "best_pace": [
         {
@@ -23,6 +169,40 @@
           "display": "30 min",
           "value": 1800,
           "workout_id": "issue-1"
+        }
+      ]
+    },
+    "tricep-pushdown": {
+      "max_e1rm": [
+        {
+          "date": "2026-07-15",
+          "display": "~74 lb e1RM (60 lb \u00d7 7)",
+          "value": 74.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_volume": [
+        {
+          "date": "2026-07-15",
+          "display": "3360 lb session volume",
+          "value": 3360.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "max_weight": [
+        {
+          "date": "2026-07-15",
+          "display": "60 lb \u00d7 7",
+          "value": 60.0,
+          "workout_id": "issue-5"
+        }
+      ],
+      "rep_weight:7": [
+        {
+          "date": "2026-07-15",
+          "display": "60 lb \u00d7 7",
+          "value": 60.0,
+          "workout_id": "issue-5"
         }
       ]
     }
