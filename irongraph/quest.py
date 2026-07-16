@@ -10,7 +10,6 @@ import argparse
 import json
 import os
 from datetime import date, datetime
-from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
 from .config import load_config
@@ -83,12 +82,6 @@ def _frequent_names(registry, bucket: str, limit: int = 3) -> list[str]:
     return names or DEFAULT_PREFILL[bucket]
 
 
-def _form_link(repo: str, bucket: str, names: list[str]) -> str:
-    prefill = quote("\n".join(f"{n}: " for n in names))
-    return (f"https://github.com/{repo}/issues/new?template=log-workout.yml"
-            f"&{bucket}={prefill}")
-
-
 def build_quest(today: date | None = None) -> tuple[str, str]:
     cfg = load_config()
     tz = ZoneInfo(cfg.timezone)
@@ -102,7 +95,6 @@ def build_quest(today: date | None = None) -> tuple[str, str]:
     branch = os.environ.get("GITHUB_REF_NAME", "main") or "main"
     st_names = _frequent_names(reg, "strength")
     ca_names = _frequent_names(reg, "cardio")
-    co_names = _frequent_names(reg, "core")
 
     lines = [
         f"<!-- irongraph:quest date={d.isoformat()} -->",
@@ -116,12 +108,10 @@ def build_quest(today: date | None = None) -> tuple[str, str]:
         "",
         "### What did you train today?",
         "",
-        "**⚡ Quick log** — tap one; your usual exercises are prefilled, just type the numbers and Submit:",
+        f"## [📝 &nbsp;Log today's workout →](https://github.com/{repo}/issues/new?template=log-workout.yml)",
         "",
-        f"### [🏋️ &nbsp;Strength]({_form_link(repo, 'strength', st_names)}) &nbsp;·&nbsp; "
-        f"[🏃 &nbsp;Cardio]({_form_link(repo, 'cardio', ca_names)}) &nbsp;·&nbsp; "
-        f"[🧱 &nbsp;Core]({_form_link(repo, 'core', co_names)}) &nbsp;·&nbsp; "
-        f"[📋 &nbsp;Full list](https://github.com/{repo}/issues/new?template=log-workout.yml)",
+        "_Every exercise is pre-listed by muscle group — type numbers after the ones you did and Submit. "
+        "New exercises you add in the dashboard appear automatically._",
         "",
         "**💬 Or comment right here, then close the issue:**",
         "",

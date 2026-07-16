@@ -13,8 +13,10 @@
   today's `irongraph:quest date=YYYY-MM-DD` marker before creating one,
   so retries/manual runs can't double-post.
 - Ensures all labels exist (`--force` is create-or-update), builds the
-  body with `python -m irongraph.quest` (which injects your level, XP,
-  and current PR hints next to each exercise), assigns the repo owner.
+  body with `python -m irongraph.quest` — a compact card (hero sprite,
+  level/XP) with one **Log today's workout** button that opens the
+  registry-generated issue form, plus comment-to-log — and assigns the
+  repo owner.
 
 ## process-workout.yml — quest completion
 

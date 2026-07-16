@@ -48,9 +48,10 @@ PHILOSOPHY = """\
 > You write code to improve software. You train to improve yourself.
 > **IronGraph gives both forms of progress a version history.**
 
-**How it works:** at ~9 PM (America/Phoenix) a GitHub Action opens a quest
-issue. I check off exercises on my phone, type my numbers, and close the
-issue. A workflow parses and validates the data, updates records,
+**How it works:** at 9 PM (America/Phoenix) a GitHub Action opens a quest
+issue. I tap **Log today's workout** — a form pre-listing every exercise I
+track — type numbers next to what I trained, and Submit (or just comment
+`Exercise: numbers` on the quest and close it). A workflow parses and validates the data, updates records,
 achievements and charts, and creates **one atomic Git commit authored as
 `Ashish Kurse <ashishkurse@gmail.com>`** on the default branch — so when
 GitHub's [documented contribution criteria](https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile)

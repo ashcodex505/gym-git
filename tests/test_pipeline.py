@@ -151,6 +151,6 @@ def test_quest_shows_pr_hints_after_ingest(iso_repo):
 
     from irongraph.quest import build_quest
     _, body = build_quest(date(2026, 7, 13))
-    # quick-log links learn from history: bench was trained, so the
-    # strength prefill leads with it
-    assert "strength=Barbell%20Bench%20Press" in body
+    # one full-list log button; comment example learns from history
+    assert "issues/new?template=log-workout.yml" in body
+    assert "Barbell Bench Press:" in body  # trained -> used as comment example
