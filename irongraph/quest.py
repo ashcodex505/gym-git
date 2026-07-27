@@ -16,21 +16,6 @@ from .config import load_config
 from .gamify import load_profile, xp_for_level
 from .registry import Registry
 
-CATEGORY_META = [
-    ("chest", "🏋️ Chest"),
-    ("back", "🦾 Back"),
-    ("shoulders", "🛡️ Shoulders"),
-    ("biceps", "💪 Biceps"),
-    ("triceps", "🔱 Triceps"),
-    ("legs", "🦵 Legs"),
-    ("glutes", "🍑 Glutes"),
-    ("core", "🧿 Core / Abs"),
-    ("cardio", "🏃 Cardio"),
-    ("calisthenics", "🤸 Calisthenics"),
-    ("mobility", "🧘 Mobility"),
-    ("other", "📦 Other"),
-]
-
 CHEATSHEET = """\
 <details>
 <summary>📖 <b>Syntax cheatsheet</b></summary>
@@ -106,21 +91,23 @@ def build_quest(today: date | None = None) -> tuple[str, str]:
         "",
         '<br clear="left">',
         "",
-        "### What did you train today?",
+        "### 📝 What did you train today?",
         "",
-        f"## [📝 &nbsp;Log today's workout →](https://github.com/{repo}/issues/new?template=log-workout.yml)",
+        "**Edit this issue** (or comment below) and write what you did — plain text, "
+        "your own words, one exercise per line. No lists to scroll, nothing to pick from. "
+        "Then close the issue and it's logged automatically.",
         "",
-        "_Every exercise is pre-listed by muscle group — type numbers after the ones you did and Submit. "
-        "New exercises you add in the dashboard appear automatically._",
-        "",
-        "**💬 Or comment right here, then close the issue:**",
-        "",
-        "```",
+        "```text",
         f"{ca_names[0]}: 30 min, speed 3, incline 12",
         f"{st_names[0]}: 185 x 6, 185 x 5",
         "```",
         "",
-        "Every `Exercise: numbers` line you comment is logged when this quest closes.",
+        "Casual wording or a typo still finds the right exercise. "
+        "A genuinely new movement is added to your graph automatically, no setup needed.",
+        "",
+        "### Session notes",
+        "",
+        "_(optional — how it felt, anything worth remembering)_",
         "",
         CHEATSHEET,
         "---",

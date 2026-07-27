@@ -14,9 +14,9 @@
   so retries/manual runs can't double-post.
 - Ensures all labels exist (`--force` is create-or-update), builds the
   body with `python -m irongraph.quest` — a compact card (hero sprite,
-  level/XP) with one **Log today's workout** button that opens the
-  registry-generated issue form, plus comment-to-log — and assigns the
-  repo owner.
+  level/XP) with a blank freeform prompt: **edit the issue (or comment),
+  write what you did in plain text, close it.** No pre-listed exercise
+  menu and no checkboxes to fill in — and assigns the repo owner.
 
 ## process-workout.yml — quest completion
 
@@ -31,6 +31,11 @@
   is never interpolated into shell syntax, filenames, or git commands.
   The parser additionally length-clamps and strips backticks from any
   text that can reach commit messages or SVG/markdown output.
+- **Matching**: each line is `Exercise: numbers` in the user's own words —
+  `registry.resolve` (exact/alias) then `registry.resolve_fuzzy` (typo- and
+  wording-tolerant, never guessing across two distinct exercises) decide
+  whether it lands on a known exercise or mints a new custom one, which
+  then appears in `data/graph.json` on this same commit.
 - **Outcomes** (from the ingest summary JSON):
   - `ok` → one atomic commit via `irongraph.gitcommit` (author
     configured **and verified** — see

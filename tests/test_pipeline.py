@@ -138,8 +138,8 @@ def test_quest_generation(iso_repo):
     title, body = build_quest(date(2026, 7, 12))
     assert "Daily Quest" in title and "July 12, 2026" in title
     assert "irongraph:quest date=2026-07-12" in body
-    # compact card: quick-log form links + comment-to-log, NO checkbox wall
-    assert "issues/new?template=log-workout.yml" in body
+    # freeform: no issue-form link, no pre-listed exercise checkbox wall
+    assert "template=log-workout" not in body
     assert "comment" in body.lower()
     assert "- [ ] Barbell Bench Press ::" not in body
     assert body.count("- [ ]") == 0
@@ -151,6 +151,6 @@ def test_quest_shows_pr_hints_after_ingest(iso_repo):
 
     from irongraph.quest import build_quest
     _, body = build_quest(date(2026, 7, 13))
-    # one full-list log button; comment example learns from history
-    assert "issues/new?template=log-workout.yml" in body
+    # freeform example line learns from history, no issue-form link
+    assert "template=log-workout" not in body
     assert "Barbell Bench Press:" in body  # trained -> used as comment example

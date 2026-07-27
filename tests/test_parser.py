@@ -103,6 +103,39 @@ def test_alias_resolution(iso_repo):
     assert r.resolve("ohp").id == "overhead-press"
 
 
+def test_fuzzy_resolution_typo_tolerant(iso_repo):
+    r = Registry.load()
+    assert r.resolve_fuzzy("Deadlft").id == "deadlift"
+    assert r.resolve_fuzzy("Treadmil").id == "treadmill"
+
+
+def test_fuzzy_resolution_never_confuses_different_exercises(iso_repo):
+    """A 2026-07 near-miss: naive character-similarity matched "Landmine
+    Press" to "Standing Press" (an Overhead Press alias) purely because
+    both strings share "press". Distinct lifts must never be confused."""
+    r = Registry.load()
+    assert r.resolve_fuzzy("landmine press") is None
+    assert r.resolve_fuzzy("nordic curl") is None
+    # generic single words shared by several variants must stay ambiguous
+    assert r.resolve_fuzzy("press") is None
+
+
+def test_freeform_plaintext_no_checkbox_needed(iso_repo):
+    """The redesigned quest issue has no checkbox wall or pre-listed
+    exercise menu — bare `Exercise: numbers` lines must log on their own,
+    and casual/typo'd names still land on the right exercise."""
+    res = make_parser(iso_repo).parse(
+        "Bench Press: 185 lb x 6, 185 x 5\n"
+        "Deadlft: 315 x 3\n"
+        "Sled Push: 90 lb x 20\n"
+    )
+    ids = [e.exercise_id for e in res.entries]
+    assert "barbell-bench-press" in ids
+    assert "deadlift" in ids
+    assert "sled-push" in ids
+    assert "sled-push" in res.new_custom
+
+
 def test_incline_speed_walk(iso_repo):
     p = make_parser(iso_repo)
     res = p.parse("- [x] Treadmill :: 25 min, speed 3, incline 12")

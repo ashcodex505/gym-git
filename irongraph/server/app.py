@@ -244,15 +244,12 @@ def add_exercise(body: NewExercise):
         relations={"similar_to": related_ids} if related_ids else None,
         compound=body.compound,
     )
-    # rebuild the graph + GitHub log form so the new exercise is everywhere
-    from ..formgen import write_form
+    # rebuild the graph so the new exercise is everywhere
     from ..graphbuild import build_graph, write_graph
     write_graph(build_graph(reg, S.stats))
-    write_form(reg)
     S.mtime = -1.0  # force refresh on next read
     return {"exercise": ex.to_dict(), "unresolved_related": unresolved,
-            "files_changed": ["data/registry/custom-exercises.json", "data/graph.json",
-                              ".github/ISSUE_TEMPLATE/log-workout.yml"]}
+            "files_changed": ["data/registry/custom-exercises.json", "data/graph.json"]}
 
 
 class EditExercise(BaseModel):
@@ -314,14 +311,11 @@ def edit_exercise(ex_id: str, body: EditExercise):
         fields["relations"] = {**ex.relations, "similar_to": ids}
 
     ex = reg.update_exercise(ex_id, fields)
-    from ..formgen import write_form
     from ..graphbuild import build_graph, write_graph
     write_graph(build_graph(reg, S.stats))
-    write_form(reg)
     S.mtime = -1.0
     return {"exercise": ex.to_dict(), "unresolved_related": unresolved,
-            "files_changed": ["data/registry/custom-exercises.json", "data/graph.json",
-                              ".github/ISSUE_TEMPLATE/log-workout.yml"]}
+            "files_changed": ["data/registry/custom-exercises.json", "data/graph.json"]}
 
 
 class AskBody(BaseModel):

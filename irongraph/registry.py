@@ -7,6 +7,7 @@ inferred from how the user logged them.
 
 from __future__ import annotations
 
+import difflib
 import json
 import re
 
@@ -76,6 +77,52 @@ class Registry:
 
     def resolve(self, name: str) -> Exercise | None:
         return self.by_id.get(self._alias_index.get(self._norm(name), ""))
+
+    def resolve_fuzzy(self, name: str, typo_cutoff: float = 0.82) -> Exercise | None:
+        """Closest known exercise for a name with no exact/alias match —
+        lets freeform logging land on the right exercise despite typos or
+        casual wording, without ever guessing across genuinely different
+        exercises.
+
+        Two independent signals, deliberately *not* blended into one plain
+        character-similarity score: a raw edit-distance ratio treats "press"
+        as most of the string in both "Landmine Press" and "Standing Press",
+        so it happily confuses unrelated lifts that merely share a common
+        word (a real 2026-07 near-miss). Instead:
+
+        * multi-word names match only via *token containment* (every word
+          of the shorter name appears in the longer one) — "bench press"
+          can find "Barbell Bench Press" but never "Landmine Press";
+        * single-word names (or a single word against another single word)
+          fall back to character-ratio, which is exactly what typo
+          tolerance needs ("Deadlft" -> "Deadlift").
+
+        Either way, if the best match ties with a *different* exercise,
+        the name is left unmatched (ambiguous) so a new custom exercise is
+        created instead of silently misattributing history to the wrong
+        one — e.g. bare "Press" or "Squat" never auto-picks a variant."""
+        key = self._norm(name)
+        if not key or key in self._alias_index:
+            return None
+        q_tokens = set(key.split())
+        scored: list[tuple[float, str]] = []
+        for cand in self._alias_index:
+            c_tokens = set(cand.split())
+            if q_tokens and c_tokens and (q_tokens <= c_tokens or c_tokens <= q_tokens):
+                coverage = min(len(q_tokens), len(c_tokens)) / max(len(q_tokens), len(c_tokens))
+                scored.append((0.9 + 0.1 * coverage, cand))
+            elif len(q_tokens) == 1 and len(c_tokens) == 1:
+                ratio = difflib.SequenceMatcher(None, key, cand).ratio()
+                if ratio >= typo_cutoff:
+                    scored.append((ratio, cand))
+        if not scored:
+            return None
+        scored.sort(key=lambda t: -t[0])
+        best_score, best_key = scored[0]
+        for score, cand in scored[1:]:
+            if score >= best_score - 0.03 and self._alias_index[cand] != self._alias_index[best_key]:
+                return None  # ambiguous between two distinct exercises
+        return self.by_id.get(self._alias_index[best_key])
 
     # ------------------------------------------------------------------
     def register_custom(

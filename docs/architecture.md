@@ -12,9 +12,10 @@
                  creates the quest issue (gh issue create)
                  labels: daily-quest · workout · awaiting-log
                                    │
-                     user edits issue on phone,
-                     checks [x] boxes, adds numbers,
-                     closes issue (or labels log-workout)
+                     user edits the issue (or comments) on
+                     their phone — plain text, own words,
+                     no checkboxes or exercise menu — then
+                     closes it (or labels log-workout)
                                    │
                                    ▼
                  .github/workflows/process-workout.yml
@@ -56,7 +57,7 @@
 | Module | Responsibility | Depends on |
 |---|---|---|
 | `models.py` | canonical dataclasses, unit conversion | — |
-| `registry.py` | exercise registry + aliases + custom exercises | models |
+| `registry.py` | exercise registry + aliases + custom exercises + fuzzy match | models |
 | `parser.py` | issue markdown → entries (untrusted input boundary) | registry |
 | `records.py` | PR engine, append-only record history | models |
 | `analytics.py` | e1RM (Epley), trends, per-exercise stats | models |
@@ -83,6 +84,13 @@ recomputable from workout history (`python -m irongraph.ingest --regen`).
 - **One atomic commit per workout** — one workout = one contribution
   event = one coherent point in history. Data, records, charts, README
   all move together.
+- **Freeform logging, no menu to choose from** — the quest issue is a
+  blank slate (edit it, or comment, in your own words); there is no
+  pre-listed exercise form to select from. `registry.resolve_fuzzy`
+  matches casual wording and typos to the closest known exercise (never
+  guessing across two genuinely different lifts); anything that still
+  doesn't match becomes a new custom exercise and shows up in the graph
+  on the next commit — no dashboard setup required first.
 - **Layout computed in Python, not the browser** — same split as the
   Multimodal Search reference (its `prepare_atlas.py`): the frontend is a
   pure renderer, startup is instant, and layout is deterministic

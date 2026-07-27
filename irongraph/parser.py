@@ -1,21 +1,29 @@
 """Daily-quest issue parser.
 
-The quest template asks the user to check exercises and append performance
-after a `::` separator:
+The quest issue is a blank slate: the user just writes what they did, one
+exercise per line, in their own words — no checkboxes, no pre-listed
+exercise menu to choose from:
 
-    - [x] Barbell Bench Press :: 185 lb x 6, 185 x 5
-    - [x] Treadmill :: 25 min, 2.3 mi, incline 3
-    - [x] Plank :: 2m15s
-    - [x] Pull-ups :: bw x 8; +25 lb x 5
-    - [x] StairMaster :: 30 min level 8
+    Barbell Bench Press: 185 lb x 6, 185 x 5
+    Treadmill: 25 min, 2.3 mi, incline 3
+    Plank: 2m15s
+    Pull-ups: bw x 8; +25 lb x 5
+    StairMaster: 30 min level 8
 
-Grammar is deliberately forgiving (phone keyboards, autocorrect):
-* separators `::`, `—`, `|` all work
+Checkbox lines (`- [x] Name :: perf`) are still understood too, for anyone
+who prefers the old quest-list style. Grammar is deliberately forgiving
+(phone keyboards, autocorrect):
+* separators `::`, `—`, `|`, or a plain `:` all work
 * `x`, `X`, `×`, `*` all mean "times"
 * `185x6x3` = 3 sets of 185×6 ; `3x5 @ 185 lb` = 3 sets of 5 at 185
 * set groups split on `;` or `,` for strength; cardio metrics of one
   effort are read from the whole string
 * `// text` at the end of a line becomes a per-exercise note
+
+Exercise names are matched exactly first, then fuzzily against the
+registry (typos, shorthand) via `Registry.resolve_fuzzy` — anything that
+still doesn't match becomes a brand-new custom exercise, auto-added to the
+graph (see `registry.register_custom`), instead of being dropped.
 
 Issue text is untrusted input from a public repository: nothing here is
 ever passed to a shell, and all free text is length-clamped before it can
@@ -288,13 +296,16 @@ class QuestParser:
                 continue
             self._try_plain_line(line, res)
         if not res.entries and not res.problems:
-            res.problems.append(ParseProblem("", "no exercises found — check `[x]` boxes (quest issue) or write `Exercise: numbers` lines (log form)"))
+            res.problems.append(ParseProblem("", "no exercises found — write `Exercise: numbers` lines (plain text, e.g. `Bench Press: 185 lb x 6`)"))
         return res
 
     def _try_plain_line(self, line: str, res: ParseResult) -> None:
-        """Issue-form logging: bare `Exercise: numbers` lines (no checkbox).
-        Only names already in the registry are accepted, so template prose,
-        placeholders and section text can never be misparsed into workouts."""
+        """Freeform logging: bare `Exercise: numbers` lines (no checkbox
+        needed). Markdown structure (headers, quotes, code, lists) can
+        never be misread as a workout line; anything else that looks like
+        `Name: numbers` is parsed and matched to the registry (exact, then
+        fuzzy) — a genuinely new exercise just becomes a new custom entry
+        rather than being silently dropped."""
         line = line.strip()
         if not line or line.startswith(self._PLAIN_SKIP):
             return
@@ -304,9 +315,6 @@ class QuestParser:
             rest, note = rest.split("//", 1)
         name, perf = _split_name_perf(rest.strip())
         if not perf:
-            return
-        ex = self.registry.resolve(_clamp(name, MAX_NAME_LEN))
-        if ex is None:
             return
         self._parse_line(rest.strip() + (f" // {note.strip()}" if note else ""), res)
 
@@ -320,7 +328,7 @@ class QuestParser:
         m = re.search(r"###[^\n]*Session notes[^\n]*\n+(.*?)(?=\n###|\Z)", body, re.DOTALL | re.IGNORECASE)
         if m:
             notes = m.group(1).strip()
-            if notes and notes != "_No response_":
+            if notes and notes != "_No response_" and not notes.strip("_").lower().startswith("(optional"):
                 return _clamp(notes, 1000)
         return None
 
@@ -341,7 +349,7 @@ class QuestParser:
             return
         if name.lower().startswith(("<exercise", "exercise name", "your exercise")):
             return  # untouched template placeholder
-        ex = self.registry.resolve(name)
+        ex = self.registry.resolve(name) or self.registry.resolve_fuzzy(name)
         if ex is None:
             modality = self._infer_modality(perf, meta)
             ex = self.registry.register_custom(
