@@ -60,12 +60,13 @@
 | `registry.py` | exercise registry + aliases + custom exercises + fuzzy match | models |
 | `parser.py` | issue markdown → entries (untrusted input boundary) | registry |
 | `records.py` | PR engine, append-only record history | models |
-| `analytics.py` | e1RM (Epley), trends, per-exercise stats | models |
+| `analytics.py` | e1RM (Epley), trends, per-exercise stats, per-region muscle tiers | models |
 | `streaks.py` | activity + weekly-consistency streaks | — |
 | `achievements.py` | declarative achievement definitions | records, streaks |
 | `gamify.py` | XP grants, level curve | config |
 | `graphbuild.py` | knowledge graph + deterministic force layout | registry |
-| `svggen.py` | pure-Python SVG cards/charts | — |
+| `svggen.py` | pure-Python SVG cards/charts (incl. physique bars) | — |
+| `sprites.py` | pixel-art hero (level-tier gear + per-region physique bulge) | — |
 | `readmegen.py` | README as a *view* over data/ | — |
 | `commitmsg.py` | commit subject/body generation | records |
 | `ingest.py` | orchestrator CLI | all of the above |
@@ -91,6 +92,16 @@ recomputable from workout history (`python -m irongraph.ingest --regen`).
   guessing across two genuinely different lifts); anything that still
   doesn't match becomes a new custom exercise and shows up in the graph
   on the next commit — no dashboard setup required first.
+- **Physique, not just a level bar** — the hero's gear color is one
+  level-wide progression, but its *build* is six independent ones.
+  `analytics.compute_muscle_tiers` scores shoulders/chest/back/arms/core/
+  legs (tier 0-4) from how often each region's muscles have actually been
+  trained; `sprites.apply_muscle_bulge` overlays that onto the hero by
+  scanning each pixel frame for anchors (a shoulder T-run, the chest
+  emblem, a grip point, a leg block) and filling in currently-blank
+  pixels just outside them — never moving or overwriting the base art, so
+  a region simply looks incrementally bigger the more it's trained.
+  `generated/physique.svg` is the legend for exactly what changed.
 - **Layout computed in Python, not the browser** — same split as the
   Multimodal Search reference (its `prepare_atlas.py`): the frontend is a
   pure renderer, startup is instant, and layout is deterministic

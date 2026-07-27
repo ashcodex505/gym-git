@@ -155,6 +155,45 @@ def muscle_distribution(dist: dict[str, int], w: int = 840) -> str:
     return _svg(w, h, "".join(parts), "Muscle group distribution")
 
 
+# --------------------------------------------------------------- physique
+PHYSIQUE_REGIONS = [
+    ("shoulders", "Shoulders", GOLD),
+    ("chest", "Chest", ACCENT),
+    ("back", "Back", "#58a6ff"),
+    ("arms", "Arms", "#bc8cff"),
+    ("core", "Core", "#e3b341"),
+    ("legs", "Legs", GREEN),
+]
+PHYSIQUE_TIER_NAMES = ["Untrained", "Toned", "Built", "Jacked", "Swole"]
+
+
+def physique_bars(tiers: dict[str, int], w: int = 840) -> str:
+    """Segmented tier-0..4 bars for each region the hero sprite bulks up —
+    the same numbers `sprites.apply_muscle_bulge` draws onto the hero, so
+    this card is a legend for exactly what's visibly changing above it."""
+    max_tier = len(PHYSIQUE_TIER_NAMES) - 1
+    h = 84 + len(PHYSIQUE_REGIONS) * 34 + 16
+    parts = [_header("Physique", "trained regions bulk up the hero above", w)]
+    label_w, gap_w = 118, 130
+    bar_x = 24 + label_w
+    bar_w = w - 48 - label_w - gap_w
+    seg_gap = 6
+    seg_w = (bar_w - seg_gap * (max_tier - 1)) / max_tier
+    for i, (key, label, color) in enumerate(PHYSIQUE_REGIONS):
+        tier = max(0, min(tiers.get(key, 0), max_tier))
+        y = 84 + i * 34
+        parts.append(f'<text x="{24 + label_w - 12}" y="{y + 14}" text-anchor="end" font-family="{SANS}" '
+                     f'font-size="12" fill="{FG}">{_esc(label)}</text>')
+        for s in range(max_tier):
+            x = bar_x + s * (seg_w + seg_gap)
+            filled = s < tier
+            parts.append(f'<rect x="{x:.1f}" y="{y}" width="{seg_w:.1f}" height="18" rx="4" '
+                         f'fill="{color if filled else CARD}" stroke="{LINE}"/>')
+        parts.append(f'<text x="{bar_x + bar_w + 14:.0f}" y="{y + 14}" font-family="{MONO}" font-size="11" '
+                     f'fill="{MUTED}">{_esc(PHYSIQUE_TIER_NAMES[tier])}</text>')
+    return _svg(w, h, "".join(parts), "Physique region progress")
+
+
 # ------------------------------------------------------------- progression
 def exercise_progression(name: str, history: list[dict], w: int = 840) -> str | None:
     """Line chart of best set weight (or reps/duration/distance) over time,

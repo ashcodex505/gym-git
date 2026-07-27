@@ -184,3 +184,56 @@ def muscle_distribution(events: list[WorkoutEvent], registry) -> dict[str, int]:
             for m in ex.primary_muscles:
                 dist[m] = dist.get(m, 0) + 1
     return dict(sorted(dist.items(), key=lambda kv: -kv[1]))
+
+
+# Body regions the hero sprite can visibly "bulk up" — coarser than the raw
+# muscle taxonomy in the registry (e.g. front/side/rear delts all read as
+# one "shoulders" region on a 22×24 pixel sprite).
+MUSCLE_REGIONS: dict[str, set[str]] = {
+    "chest": {"chest", "upper-chest", "lower-chest"},
+    "back": {"lats", "mid-back", "upper-back", "traps", "lower-back"},
+    "shoulders": {"front-delts", "side-delts", "rear-delts"},
+    "arms": {"biceps", "triceps", "forearms"},
+    "legs": {"quads", "hamstrings", "calves", "glutes", "hip-flexors", "legs"},
+    "core": {"abs", "core", "obliques"},
+}
+# cumulative region "touches" (primary=1.0, secondary-only=0.4) needed to
+# reach tier 1, 2, 3, 4 — tier 0 is untrained
+MUSCLE_TIER_THRESHOLDS = (3, 8, 16, 30)
+
+
+def compute_muscle_tiers(events: list[WorkoutEvent], registry) -> dict[str, int]:
+    """How "jacked" each body region should look on the hero sprite: a
+    tier 0-4 built from how often that region's muscles have ever been
+    trained. An exercise counts once per region per entry even if it
+    lists several muscles in the same region (e.g. a press hitting both
+    front and side delts is one "shoulders" touch, not two); a region
+    hit only as a secondary mover counts for less than a primary one."""
+    counts: dict[str, float] = {region: 0.0 for region in MUSCLE_REGIONS}
+    for ev in events:
+        for entry in ev.entries:
+            ex = registry.by_id.get(entry.exercise_id)
+            if not ex:
+                continue
+            primary_hit: set[str] = set()
+            secondary_hit: set[str] = set()
+            for m in ex.primary_muscles:
+                for region, muscles in MUSCLE_REGIONS.items():
+                    if m in muscles:
+                        primary_hit.add(region)
+            for m in ex.secondary_muscles:
+                for region, muscles in MUSCLE_REGIONS.items():
+                    if m in muscles:
+                        secondary_hit.add(region)
+            for region in primary_hit:
+                counts[region] += 1.0
+            for region in secondary_hit - primary_hit:
+                counts[region] += 0.4
+    tiers = {}
+    for region, n in counts.items():
+        tier = 0
+        for threshold in MUSCLE_TIER_THRESHOLDS:
+            if n >= threshold:
+                tier += 1
+        tiers[region] = tier
+    return tiers

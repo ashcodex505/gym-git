@@ -1,13 +1,22 @@
 """Pixel-art hero sprites — pure Python, zero dependencies.
 
 The IronGraph hero is a little lifter who performs an endless
-clean-and-press. Gear evolves with your level tier:
+clean-and-press. Two independent things make the hero look different:
+
+* **Gear** evolves with overall level tier (armor color/material):
 
     Novice     cloth        (gray)
     Apprentice leather      (brown)
     Ironbound  steel        (blue-silver)
     Vanguard   gilded steel (gold trim)
     Titan      ember-forged (glowing accent, aura)
+
+* **Physique** evolves per body region, independent of level —
+  `apply_muscle_bulge` overlays a tier 0-4 per region (shoulders, chest,
+  back, arms, legs, core; see `analytics.compute_muscle_tiers`) driven by
+  how often *that region specifically* has been trained, so a
+  deadlift-only lifter and a bench-only lifter end up visibly different
+  even at the same level.
 
 Frames are ASCII pixel grids; the encoder writes a real animated GIF89a
 (custom minimal LZW — the classic clear-code technique) so the sprite
@@ -125,6 +134,8 @@ BASE_PALETTE = {
     "P": (52, 58, 68),      # plate rim
     "p": (74, 82, 96),      # plate core
     "A": (247, 129, 102),   # aura (titan only)
+    "m": (222, 148, 108),   # muscle mass (shoulders/chest/back/arms bulge)
+    "q": (94, 104, 122),    # quad/leg mass highlight
 }
 
 # (min_level, tier_id, armor, armor_shade, emblem, plate_rim, plate_core, aura?)
@@ -167,6 +178,113 @@ def _has_aura(level: int) -> bool:
 def _grid(art: str) -> list[str]:
     rows = [r for r in art.strip("\n").split("\n")]
     return [r.ljust(W, ".")[:W] for r in rows][:H_ROWS]
+
+
+def _find_row_with_run(rows: list[str], ch: str, min_run: int) -> tuple[int, int, int] | None:
+    """First row (top to bottom) with a contiguous run of `ch` at least
+    `min_run` long. Returns (row, run_start, run_end_exclusive)."""
+    for y, row in enumerate(rows):
+        run_start = None
+        for x, c in enumerate(row + "\0"):  # sentinel flushes a trailing run
+            if c == ch:
+                if run_start is None:
+                    run_start = x
+            elif run_start is not None:
+                if x - run_start >= min_run:
+                    return y, run_start, x
+                run_start = None
+    return None
+
+
+def apply_muscle_bulge(rows: list[str], tiers: dict[str, int]) -> list[str]:
+    """Overlay per-region "jacked" tiers (0-4, see
+    analytics.compute_muscle_tiers) onto a hero frame that has already
+    been through `_grid`. Every effect only ever fills in currently-blank
+    (transparent) pixels just outside the existing silhouette, so nothing
+    shifts or overwrites the base art — a region simply looks
+    incrementally bigger the more it's been trained. Anchors are found by
+    scanning for content (a T-run, the CCCC emblem, an "LL" leg block, a
+    "G" grip point) rather than fixed row numbers, since the three lift
+    poses aren't vertically aligned (the overhead pose raises the whole
+    upper body ~3 rows)."""
+    if not tiers or not any(tiers.values()):
+        return rows
+    grid = [list(r) for r in rows]
+    h = len(grid)
+    w = len(grid[0]) if grid else 0
+
+    def blank(y: int, x: int, ch: str) -> None:
+        if 0 <= y < h and 0 <= x < w and grid[y][x] == ".":
+            grid[y][x] = ch
+
+    shoulders = tiers.get("shoulders", 0)
+    if shoulders:
+        hit = _find_row_with_run(rows, "T", 6)
+        if hit:
+            y, x0, x1 = hit
+            for i in range(1, shoulders + 1):
+                blank(y, x0 - i, "m")
+                blank(y, x1 - 1 + i, "m")
+
+    chest = tiers.get("chest", 0)
+    if chest:
+        for y, row in enumerate(rows):
+            if "CCCC" not in row:
+                continue
+            x0, x1 = row.index("T"), row.rindex("T") + 1
+            for i in range(1, chest + 1):
+                blank(y, x0 - i, "m")
+                blank(y, x1 - 1 + i, "m")
+
+    back = tiers.get("back", 0)
+    if back:
+        for y, row in enumerate(rows):
+            if row.count("S") == 2 and "T" in row:
+                xs = [i for i, c in enumerate(row) if c == "S"]
+                for i in range(1, back + 1):
+                    blank(y, xs[0] - i, "m")
+                    blank(y, xs[-1] + i, "m")
+
+    core = tiers.get("core", 0)
+    if core:
+        for y, row in enumerate(rows):
+            if "Tt" in row and "tT" in row:
+                t_positions = [i for i, c in enumerate(row) if c == "T"]
+                if not t_positions:
+                    continue
+                center = sum(t_positions) / len(t_positions)
+                t_positions.sort(key=lambda i: abs(i - center))
+                for i in t_positions[: core * 2]:
+                    grid[y][i] = "t"
+
+    legs = tiers.get("legs", 0)
+    if legs:
+        for y, row in enumerate(rows):
+            if "LL" not in row or "B" in row:
+                continue
+            xs = [i for i, c in enumerate(row) if c == "L"]
+            groups: list[list[int]] = []
+            for i in xs:
+                if groups and i - groups[-1][-1] == 1:
+                    groups[-1].append(i)
+                else:
+                    groups.append([i])
+            for g in groups:
+                for i in range(1, legs + 1):
+                    blank(y, g[0] - i, "q")
+                    blank(y, g[-1] + i, "q")
+
+    arms = tiers.get("arms", 0)
+    if arms:
+        for y, row in enumerate(rows):
+            for x, c in enumerate(row):
+                if c != "G":
+                    continue
+                for i in range(1, arms + 1):
+                    blank(y - i, x, "m")
+                    blank(y + i, x, "m")
+
+    return ["".join(r) for r in grid]
 
 
 def _add_aura(rows: list[str]) -> list[str]:
@@ -269,7 +387,8 @@ def write_png(path: Path, rgba_rows: list[list[tuple[int, int, int, int]]]) -> N
 
 
 # ------------------------------------------------------------ generate
-def generate_hero(level: int, out_gif: Path, scale: int = 6) -> None:
+def generate_hero(level: int, out_gif: Path, scale: int = 6,
+                   muscle_tiers: dict[str, int] | None = None) -> None:
     pal_map = _palette_for(level)
     chars = sorted(pal_map)
     palette = [(13, 17, 23)] + [pal_map[c] for c in chars]   # slot 0 = transparent
@@ -278,6 +397,8 @@ def generate_hero(level: int, out_gif: Path, scale: int = 6) -> None:
     frames = []
     for art in CYCLE:
         rows = _grid(art)
+        if muscle_tiers:
+            rows = apply_muscle_bulge(rows, muscle_tiers)
         if _has_aura(level):
             rows = _add_aura(rows)
         flat: list[int] = []
@@ -290,9 +411,12 @@ def generate_hero(level: int, out_gif: Path, scale: int = 6) -> None:
     write_gif(out_gif, frames, W * scale, H_ROWS * scale, palette, FRAME_DELAY_CS)
 
 
-def generate_hero_still(level: int, out_png: Path, scale: int = 6) -> None:
+def generate_hero_still(level: int, out_png: Path, scale: int = 6,
+                         muscle_tiers: dict[str, int] | None = None) -> None:
     pal_map = _palette_for(level)
     rows = _grid(FRAME_OVERHEAD)
+    if muscle_tiers:
+        rows = apply_muscle_bulge(rows, muscle_tiers)
     if _has_aura(level):
         rows = _add_aura(rows)
     rgba = []
@@ -522,10 +646,11 @@ def generate_sprite(name: str, out_gif: Path, scale: int = 5) -> None:
     write_gif(out_gif, frames, w * scale, h * scale, palette, spec["delay"])
 
 
-def generate_all(level: int, outdir: Path) -> None:
-    """Regenerate the hero + scene (level-dependent) and the full sprite set."""
-    generate_hero(level, outdir / "hero-sprite.gif")
-    generate_scene(level, outdir / "scene.gif")
+def generate_all(level: int, outdir: Path, muscle_tiers: dict[str, int] | None = None) -> None:
+    """Regenerate the hero + scene (level- and muscle-tier-dependent) and
+    the full sprite set."""
+    generate_hero(level, outdir / "hero-sprite.gif", muscle_tiers=muscle_tiers)
+    generate_scene(level, outdir / "scene.gif", muscle_tiers=muscle_tiers)
     sprite_dir = outdir / "sprites"
     for name in list(LIBRARY):
         generate_sprite(name, sprite_dir / f"{name}.gif")
@@ -704,7 +829,8 @@ def _blit(grid: list[list[str]], art: str, ox: int, oy: int) -> None:
             grid[oy + dy][ox + dx] = ch
 
 
-def build_scene_frame(hero_art: str, level: int, tick: int) -> list[str]:
+def build_scene_frame(hero_art: str, level: int, tick: int,
+                       muscle_tiers: dict[str, int] | None = None) -> list[str]:
     grid = [["." for _ in range(SCENE_W)] for _ in range(SCENE_H)]
     # night sky — twinkling stars + moon
     for i, (x, y) in enumerate(STAR_SPOTS):
@@ -728,11 +854,12 @@ def build_scene_frame(hero_art: str, level: int, tick: int) -> list[str]:
     _blit(grid, torch_frames[tick % 3], 6, 21)
     forge = (FORGE_F1 if tick % 2 else FORGE_F2).replace("A", "n").replace("a", "m")
     _blit(grid, forge, 45, 20)
+    hero_rows_list = _grid(hero_art)
+    if muscle_tiers:
+        hero_rows_list = apply_muscle_bulge(hero_rows_list, muscle_tiers)
     if _has_aura(level):
-        hero_rows = "\n".join(_add_aura(_grid(hero_art)))
-    else:
-        hero_rows = "\n".join(_grid(hero_art))
-    _blit(grid, hero_rows, 22, 8)
+        hero_rows_list = _add_aura(hero_rows_list)
+    _blit(grid, "\n".join(hero_rows_list), 22, 8)
     return ["".join(r) for r in grid]
 
 
@@ -747,14 +874,15 @@ SCENE_PALETTE_EXTRA = {
 NIGHT_SKY = (11, 14, 26)
 
 
-def generate_scene(level: int, out_gif: Path, scale: int = 5) -> None:
+def generate_scene(level: int, out_gif: Path, scale: int = 5,
+                    muscle_tiers: dict[str, int] | None = None) -> None:
     pal_map = {**_palette_for(level), **SCENE_PALETTE_EXTRA}
     chars = sorted(pal_map)
     palette = [NIGHT_SKY] + [pal_map[c] for c in chars]
     index_of = {c: i + 1 for i, c in enumerate(chars)}
     frames = []
     for tick, hero_art in enumerate(CYCLE):
-        rows = build_scene_frame(hero_art, level, tick)
+        rows = build_scene_frame(hero_art, level, tick, muscle_tiers)
         flat: list[int] = []
         for row in rows:
             line = [index_of.get(ch, 0) for ch in row]

@@ -27,7 +27,7 @@ from zoneinfo import ZoneInfo
 
 from . import achievements as ach
 from . import gamify, graphbuild, paths, records, svggen
-from .analytics import compute_exercise_stats, load_all_events, muscle_distribution
+from .analytics import compute_exercise_stats, compute_muscle_tiers, load_all_events, muscle_distribution
 from .commitmsg import build_body, build_subject
 from .config import load_config
 from .models import SCHEMA_VERSION, WorkoutEvent
@@ -133,10 +133,12 @@ def regenerate_all(registry: Registry | None = None) -> dict:
     svggen.write("personal-records.svg", svggen.personal_records_card(pr_rows))
     svggen.write("muscle-distribution.svg", svggen.muscle_distribution(muscle_distribution(events, registry)))
     svggen.write("achievements.svg", svggen.achievements_card(unlocked["unlocked"], len(ach.ACHIEVEMENTS)))
+    muscle_tiers = compute_muscle_tiers(events, registry)
+    svggen.write("physique.svg", svggen.physique_bars(muscle_tiers))
 
-    # ---- pixel world: level-tier hero + full sprite library ---------------
+    # ---- pixel world: level-tier + per-region-jacked hero, full sprites ---
     from .sprites import generate_all
-    generate_all(prof.get("level", 1), paths.generated_dir())
+    generate_all(prof.get("level", 1), paths.generated_dir(), muscle_tiers=muscle_tiers)
 
     featured_charts = []
     for ex_id, stx in ex_stats.items():
@@ -154,7 +156,8 @@ def regenerate_all(registry: Registry | None = None) -> dict:
 
     # ---- README ----------------------------------------------------------
     readme = build_readme(stats_summary=summary, events=events, ex_stats=ex_stats,
-                          registry=registry, featured_charts=featured_charts)
+                          registry=registry, featured_charts=featured_charts,
+                          muscle_tiers=muscle_tiers)
     (paths.repo_root() / "README.md").write_text(readme)
     gamify.save_profile(prof)
     return summary

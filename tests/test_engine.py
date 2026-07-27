@@ -1,9 +1,10 @@
 """PR engine, e1RM, streaks, achievements, gamification."""
 
 from irongraph import records
-from irongraph.analytics import epley_e1rm
+from irongraph.analytics import compute_muscle_tiers, epley_e1rm
 from irongraph.gamify import level_from_xp, title_for_level, xp_for_level
 from irongraph.models import SetRecord, WorkoutEntry, WorkoutEvent
+from irongraph.registry import Registry
 from irongraph.streaks import compute_streaks
 
 
@@ -14,6 +15,22 @@ def ev(date, entries, id=None):
 def bench(w, r, unit="lb"):
     return WorkoutEntry(exercise_id="barbell-bench-press", exercise_name="Barbell Bench Press",
                         modality="weight_reps", sets=[SetRecord(weight=w, unit=unit, reps=r)])
+
+
+def test_compute_muscle_tiers_grows_per_region_independently(iso_repo):
+    reg = Registry.load()
+    tiers0 = compute_muscle_tiers([], reg)
+    assert tiers0["chest"] == 0 and tiers0["legs"] == 0
+
+    one_session = [ev("2026-07-01", [bench(185, 6)])]
+    tiers1 = compute_muscle_tiers(one_session, reg)
+    assert tiers1["chest"] == 0  # a single session is below the tier-1 threshold
+    assert tiers1["legs"] == 0   # untouched regions never grow
+
+    many_sessions = [ev(f"2026-07-{d:02d}", [bench(185, 6)]) for d in range(1, 20)]
+    tiers2 = compute_muscle_tiers(many_sessions, reg)
+    assert tiers2["chest"] > tiers1["chest"] >= 0
+    assert tiers2["legs"] == 0   # more bench pressing still never bulks legs
 
 
 def test_epley():
