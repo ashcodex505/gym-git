@@ -120,6 +120,21 @@ def test_fuzzy_resolution_never_confuses_different_exercises(iso_repo):
     assert r.resolve_fuzzy("press") is None
 
 
+def test_freeform_ignores_prose_with_dashes_or_colons(iso_repo):
+    """A 2026-07 incident: closing a quest issue posts an owner comment
+    like "Superseded by the redesign — quest logging is now freeform" —
+    the em dash must never be misread as a workout separator and fail
+    validation just because it's prose, not a logged exercise."""
+    res = make_parser(iso_repo).parse(
+        "Superseded by the app redesign — quest logging is now freeform "
+        "plaintext (no checkbox menu). Closing this old-style quest issue.\n"
+        "Note: felt tired today, took it easy.\n"
+    )
+    assert not res.entries
+    # treated as a no-op ("rest day"), never a validation failure
+    assert len(res.problems) == 1 and res.problems[0].line == ""
+
+
 def test_freeform_plaintext_no_checkbox_needed(iso_repo):
     """The redesigned quest issue has no checkbox wall or pre-listed
     exercise menu — bare `Exercise: numbers` lines must log on their own,

@@ -47,6 +47,15 @@ NUM = r"\d+(?:\.\d+)?"
 MAX_NOTE_LEN = 280
 MAX_NAME_LEN = 80
 
+# a bare (non-checkbox) line only counts as a workout attempt if the part
+# after the separator actually starts like a number/bodyweight marker —
+# without this, ordinary prose containing an em dash or colon (e.g. an
+# issue comment discussing the workout, not logging one) would be treated
+# as an unparseable exercise line and fail validation instead of just
+# being ignored. Checkbox lines skip this guard: checking a box is itself
+# an explicit signal, so a genuine mistake there should surface as an error.
+PERF_LOOKS_LIKE_DATA = re.compile(r"^\s*(?:bw\b|bodyweight\b|[+]?\d)", re.IGNORECASE)
+
 
 @dataclass
 class ParseProblem:
@@ -314,7 +323,7 @@ class QuestParser:
         if "//" in rest:
             rest, note = rest.split("//", 1)
         name, perf = _split_name_perf(rest.strip())
-        if not perf:
+        if not perf or not PERF_LOOKS_LIKE_DATA.match(perf):
             return
         self._parse_line(rest.strip() + (f" // {note.strip()}" if note else ""), res)
 
